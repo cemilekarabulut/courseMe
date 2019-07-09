@@ -1,0 +1,9 @@
+﻿
+@{
+    ViewBag.Title = "error";
+}
+
+<div class="alert alert-danger" role="alert"> Either your password or email is wrong. </div>
+@using (Html.BeginForm("error", "Course", FormMethod.Post))
+{
+    <button type="submit" value="Retry" class="btn btn-sec btn-lg ">Retry</button>}

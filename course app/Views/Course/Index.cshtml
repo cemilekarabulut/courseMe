@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h1 style="color:indigo">WELCOME :) </h1>
+<hr />
+<h2>You must login or sign up to continue to website.</h2>
+
+
+@using (Html.BeginForm("Index", "Course", FormMethod.Post))
+{
+    <button type="submit" value="Login" class="btn btn-primary btn-lg ">Login</button>}
+@using (Html.BeginForm("Signup", "Course"))
+{
+    <button type="submit" value="Signup" class="btn btn-secondary btn-lg">Signup</button>
+
+}
