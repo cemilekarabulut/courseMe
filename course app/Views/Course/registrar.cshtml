@@ -3,5 +3,142 @@
     ViewBag.Title = "registrar";
 }
 
-<h2>registrar</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
+          rel="stylesheet"
+          id="bootstrap-css" />
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+    <hr class="" />
+    <div class="container target">
+        <div class="row">
+            <div class="col-sm-10">
+                <hr>
+                <h1 class="">Ahmet Çınar</h1>
+                <h2></h2>
+                <button type="button" class="btn btn-info" onclick="window.location.href='./newTeacher.html'">New Teacher</button>
+                <button type="button" class="btn btn-success">Add Course</button>
+                <button type="button" class="btn btn-primary">Student List</button>
+                <button type="button" class="btn btn-warning">New Parent</button>
+                <button type="button" class="btn btn-danger">Log Out</button>
 
+                <br />
+            </div>
+            <div class="col-sm-2">
+                <a href="/users" class="pull-right">
+                    <img title="profile image"
+                         class="img-circle img-responsive"
+                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTn636aCqljZx-n2KoTFWjQvsgd0BQFM0pmVsMLeI5q5pRvp6Wo" />
+                </a>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-sm-3">
+                <!--left col-->
+                <ul class="list-group">
+                    <li class="list-group-item text-muted"
+                        contenteditable="false">
+                        Profile
+                    </li>
+                    <li class="list-group-item text-right">
+                        <span class="pull-left"><strong class="">ID </strong></span>
+                        657326541
+                    </li>
+                    <li class="list-group-item text-right">
+                        <span class="pull-left"><strong class="">Name</strong></span>
+                        Ahmet
+                    </li>
+                    <li class="list-group-item text-right">
+                        <span class="pull-left"><strong class="">Surname</strong></span>
+                        Çınar
+                    </li>
+                    <li class="list-group-item text-right">
+                        <span class="pull-left"><strong class="">Age</strong></span>
+                        35
+                    </li>
+                    <li class="list-group-item text-right">
+                        <span class="pull-left"><strong class="">Mail </strong></span>
+                        ahmet@gmail.com
+                    </li>
+                    <li class="list-group-item text-right">
+                        <span class="pull-left"><strong class="">Gender </strong></span>
+                        Male
+                    </li>
+                </ul>
+            </div>
+            <!--/col-3-->
+            <div class="col-m-9" style="" contenteditable="false">
+                <div class="col-sm-9" style="" contenteditable="false">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"></div>
+                        <div class="panel-body">
+                            <h4 align="center" style="font-weight: bold;">Courses</h4>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Course</th>
+                                        <th scope="col">Teacher</th>
+                                        <th scope="col">Section</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Fizik</td>
+                                        <td>Onat Çakır</td>
+                                        <td>Section 5</td>
+                                        <td><button type="button" class="btn btn-info">Info</button></td>
+                                    </tr>
+                                </tbody>
+                                <tbody>
+                                    <tr>
+                                        <td>Kimya</td>
+                                        <td>Onat Çakır</td>
+                                        <td>Section 3</td>
+                                        <td><button type="button" class="btn btn-info">Info</button></td>
+                                    </tr>
+                                </tbody>
+                                <tbody>
+                                    <tr>
+                                        <td>Matematik</td>
+                                        <td>Cemile Karabulut</td>
+                                        <td>Section 5</td>
+                                        <td><button type="button" class="btn btn-info">Info</button></td>
+                                    </tr>
+                                </tbody>
+                                <tbody>
+                                    <tr>
+                                        <td>Fizik</td>
+                                        <td>Onat Çakır</td>
+                                        <td>Section 8</td>
+                                        <td><button type="button" class="btn btn-info">Info</button></td>
+                                    </tr>
+                                </tbody>
+                                <tbody>
+                                    <tr>
+                                        <td>Matematik</td>
+                                        <td>Cemile Karabulut</td>
+                                        <td>Section 10</td>
+                                        <td><button type="button" class="btn btn-info">Info</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        </div>
+</body>
+</html>

@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using course_app.Models;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
-
+using course_app.Helpers;
 namespace course_app.Controllers
 {
     public class CourseController : Controller
@@ -29,6 +29,7 @@ namespace course_app.Controllers
         [HttpPost]
         public ActionResult Login(login a)
         {
+            List<string> user=new List<string>();
             string str = "";
             conn.Open();
             MySqlCommand cmd = new MySqlCommand($"select email,title from login where email='{a.email}' and password='{a.password}';", conn);
@@ -45,14 +46,43 @@ namespace course_app.Controllers
             if (String.IsNullOrEmpty(str))
                 return View("error");
             else if (str == "student")
-                return View("student");
+            {
+                conn.Open();
+                MySqlCommand cmd2 = new MySqlCommand($"select * from student where email='{a.email}' and password='{a.password}';", conn);
+         
+                MyReader = cmd2.ExecuteReader();
+                while (MyReader.Read())
+                {
+                    //Console.WriteLine(MyReader["title"].ToString());
+                    user.Add(MyReader["id"].ToString());
+                    user.Add(MyReader["name"].ToString());
+                    user.Add(MyReader["surname"].ToString());
+                    user.Add(MyReader["gender"].ToString());
+                    user.Add(MyReader["age"].ToString());
+                    user.Add(MyReader["email"].ToString());
+                    user.Add(MyReader["password"].ToString());
+                }
+
+                conn.Close();
+                var _courseHelper = new CourseHelper();
+                var student = _courseHelper.student(Convert.ToInt32(user[0]));
+                student.name=user[1];
+                student.surname = user[2];
+                student.gender = user[3];
+                student.age = Convert.ToInt32(user[4]);
+                student.email = user[5];
+                student.password = user[6];
+                return RedirectToAction("student", student);
+              //  return View(student);
+
+            }
             else if (str == "instructor")
                 return View("instructor");
             else if (str == "registrar")
                 return View("registrar");
 
             else
-                return View("parent");
+                return RedirectToAction("parent");
         }
 
 
@@ -68,15 +98,21 @@ namespace course_app.Controllers
         }
 
 
-        public ActionResult student()
+        public ActionResult student(student student)
         {
-            return PartialView();
+            
+
+            List<student_main_page> p = new List<student_main_page>();
+            Ornek a = new Ornek();
+            a.student = student;
+            a.student_Main_Pages = p;
+            return View(a);
         }
-        [HttpPost]
-        public ActionResult student(string str)
-        {
-            return View();
-        }
+        //[HttpPost]
+        //public ActionResult student(string str)
+        //{
+        //    return View();
+        //}
         public ActionResult instructor()
         {
             return PartialView();
@@ -134,11 +170,8 @@ namespace course_app.Controllers
             return View("Index");
 
         }
-        public ActionResult info()
-        {
-            return View();
-                
-        }
+       
+        
         public ActionResult addCourse()
         {
             return View();
@@ -150,6 +183,54 @@ namespace course_app.Controllers
         public ActionResult showStudent()
         {
             return View();
+        }
+
+        public ActionResult addImage()
+        {
+            
+            return View();
+        }
+        [HttpPost]
+
+        public ActionResult addImage(student a,HttpPostedFileBase image1)
+        {
+            if (image1 != null)
+            {
+                a.image = new byte[image1.ContentLength];
+                image1.InputStream.Read(a.image, 0, image1.ContentLength);
+            }
+                conn.Open();
+            MySqlCommand addPhoto = new MySqlCommand($"insert into student(image) values(@img);", conn);
+            addPhoto.Prepare();
+
+            addPhoto.Parameters.Add("@img", MySqlDbType.Binary, a.image.Length);
+            addPhoto.Parameters["@img"].Value = a.image;
+            addPhoto.ExecuteNonQuery();
+            conn.Close();
+            return View(a);
+        }
+        public List<student> item = new List<student>();
+      
+            public ActionResult retrieveImage()
+        {
+            byte[] data= null;
+            
+            student a = new student();
+            conn.Open();
+            MySqlCommand show = new MySqlCommand();
+            show.Connection = conn;
+            show.CommandText = $"SELECT image FROM student WHERE id=8";
+            MySqlDataReader MyReader;
+            MyReader = show.ExecuteReader();
+            while (MyReader.Read())
+            {
+              data = (byte[])MyReader["image"];
+            }
+
+            conn.Close();
+            a.image = data;
+            item.Add(a);
+            return View(item);
         }
     }
 }

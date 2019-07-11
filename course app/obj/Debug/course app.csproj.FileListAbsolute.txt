@@ -62,7 +62,6 @@ C:\Users\cemile\Desktop\course app\course app\bin\System.Web.Webpages.Razor.xml
 C:\Users\cemile\Desktop\course app\course app\bin\System.Web.Helpers.xml
 C:\Users\cemile\Desktop\course app\course app\bin\System.Web.Mvc.xml
 C:\Users\cemile\Desktop\course app\course app\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-C:\Users\cemile\Desktop\course app\course app\obj\Debug\course app.csprojAssemblyReference.cache
 C:\Users\cemile\Desktop\course app\course app\obj\Debug\course app.csproj.CoreCompileInputs.cache
 C:\Users\cemile\Desktop\course app\course app\obj\Debug\course app.csproj.CopyComplete
 C:\Users\cemile\Desktop\course app\course app\obj\Debug\course app.dll
@@ -72,3 +71,4 @@ C:\Users\cemile\Desktop\course app\course app\bin\Google.Protobuf.dll
 C:\Users\cemile\Desktop\course app\course app\bin\MySql.Data.dll
 C:\Users\cemile\Desktop\course app\course app\bin\Google.Protobuf.xml
 C:\Users\cemile\Desktop\course app\course app\bin\MySql.Data.xml
+C:\Users\cemile\Desktop\course app\course app\obj\Debug\course app.csprojAssemblyReference.cache
