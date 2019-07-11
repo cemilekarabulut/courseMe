@@ -3,5 +3,132 @@
     ViewBag.Title = "parent";
 }
 
-<h2>parent</h2>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+
+
+</head>
+<body>
+
+    <hr class="">
+    <div class="container target">
+        <div class="row">
+            <div class="col-sm-10">
+                <h1 class="">Parent Information System</h1>
+                @Html.ActionLink("Logout", "Index", "Course", null, new { @class = "btn btn-primary btn-danger" })
+                <br>
+            </div>
+            <div class="col-sm-2">
+                <a href="/users" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="http://www.rlsandbox.com/img/profile.jpg"></a>
+
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-3">
+                <!--left col-->
+                <ul class="list-group">
+                    <li class="list-group-item text-muted" contenteditable="false">Profile</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Name</strong></span> Fahrettin</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Surname</strong></span> Poyraz</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Age</strong></span> 54</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Mail </strong></span> fahrettin@gmail.com </li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Gender </strong></span> Male</li>
+                </ul>
+
+
+            </div>
+            <!--/col-3-->
+            <div class="col-sm-9" style="" contenteditable="false">
+                <div class="panel panel-default">
+                    <div class="panel-heading"></div>
+                    <div class="panel-body">
+                        <h4 align="center" style="font-weight: bold;">Ali Poyraz</h4>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Course</th>
+                                    <th scope="col">Section</th>
+                                    <th scope="col">Grade</th>
+                                    <th scope="col">Letter Grade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Fizik</td>
+                                    <td>Section 5</td>
+                                    <td>90</td>
+                                    <td>AA</td>
+                                </tr>
+                            <tbody>
+                                <tr>
+                                    <td>Fizik</td>
+                                    <td>Section 5</td>
+                                    <td>90</td>
+                                    <td>AA</td>
+                                </tr>
+
+                            </tbody>
+                            </tbody>
+                        </table>
+                        <hr>
+                    </div>
+                    <div class="panel-body">
+                        <h4 align="center" style="font-weight: bold;">Fatma Poyraz</h4>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Course</th>
+                                    <th scope="col">Section</th>
+                                    <th scope="col">Grade</th>
+                                    <th scope="col">Letter Grade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Fizik</td>
+                                    <td>Section 5</td>
+                                    <td>90</td>
+                                    <td>AA</td>
+                                </tr>
+
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <td>Fizik</td>
+                                    <td>Section 5</td>
+                                    <td>90</td>
+                                    <td>AA</td>
+                                </tr>
+
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <td>Fizik</td>
+                                    <td>Section 5</td>
+                                    <td>90</td>
+                                    <td>AA</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+</body>
+</html>
 

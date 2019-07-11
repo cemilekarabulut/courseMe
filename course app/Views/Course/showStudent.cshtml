@@ -1,0 +1,95 @@
+﻿
+@{
+    ViewBag.Title = "showStudent";
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+
+
+</head>
+<body>
+    <div class="container target">
+        <div class="row">
+            <div class="col-sm-10">
+                <h1 class="">@Html.ActionLink("Onat Çakır", "instructor", "Course", null, new { @style = "text-decoration:none" })</h1>
+                <hr>
+                <h2>Fizik</h2>
+                <h3>Section 5</h3>
+                <br>
+            </div>
+            <div class="col-sm-2">
+                <a href="/users" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="http://www.rlsandbox.com/img/profile.jpg"></a>
+
+            </div>
+        </div>
+        <br>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Surname</th>
+                    <th scope="col">Grade</th>
+                    <th scope="col">Enter Grade</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>23</td>
+                    <td>Ali</td>
+                    <td>Poyraz</td>
+                    <td>85</td>
+                    <td>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="ex1" type="text">
+                        </div>
+                        <button type="button" class="btn btn-success">Confirm</button>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>53</td>
+                    <td>Fatmanur</td>
+                    <td>Haydar</td>
+                    <td>63</td>
+                    <td>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="ex1" type="text">
+                        </div>
+                        <button type="button" class="btn btn-success">Confirm</button>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>32</td>
+                    <td>Abdullah</td>
+                    <td>Toprak</td>
+                    <td>90</td>
+                    <td>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="ex1" type="text">
+                        </div>
+                        <button type="button" class="btn btn-success">Confirm</button>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+    <hr />
+</body>
+</html>

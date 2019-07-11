@@ -144,7 +144,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\Course\Login.cshtml" />
     <Content Include="Views\Course\Error.cshtml" />
     <Content Include="Views\Course\student.cshtml" />
     <Content Include="Views\Course\instructor.cshtml" />
@@ -152,6 +151,9 @@
     <Content Include="Views\Course\registrar.cshtml" />
     <Content Include="Views\Course\Signup.cshtml" />
     <Content Include="Views\Course\Index.cshtml" />
+    <Content Include="Views\Course\addCourse.cshtml" />
+    <Content Include="Views\Course\grades.cshtml" />
+    <Content Include="Views\Course\showStudent.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

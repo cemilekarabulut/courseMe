@@ -1,7 +1,9 @@
 ﻿
 @{
-    ViewBag.Title = "student";
+    ViewBag.Title = "grades";
 }
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,9 +25,8 @@
         <div class="row">
             <div class="col-sm-10">
                 <h1 class="">@Html.ActionLink("Cemile Karabulut", "student", "Course", null, new { @style = "text-decoration:none" })</h1>
+
                 @Html.ActionLink("Add Course", "addCourse", "Course", null, new { @class = "btn btn-primary btn-success" })
-
-
                 @Html.ActionLink("Grades", "grades", "Course", null, new { @class = "btn btn-primary btn-info" })
                 @Html.ActionLink("Logout", "Index", "Course", null, new { @class = "btn btn-primary btn-danger" })
                 <br>
@@ -53,27 +54,32 @@
             </div>
             <!--/col-3-->
             <div class="col-sm-9" style="" contenteditable="false">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Courses</div>
-                    <div class="panel-body">
-                        <h4>Fizik</h4>
-                        <ul>
-                            <button type="button" class="btn btn-danger pull-right">Delete</button>
-                            <li>Date :</li>
-                            <li>Instructor: </li>
-                        </ul>
-                        <hr>
-                    </div>
-                    <div class="panel-body">
-                        <h4>Fizik</h4>
-                        <ul>
-                            <button type="button" class="btn btn-danger pull-right">Delete</button>
-                            <li>Date :</li>
-                            <li>Instructor: </li>
-                        </ul>
-                        <hr>
-                    </div>
-                </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Grade</th>
+                            <th scope="col">Letter Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Fizik</td>
+                            <td>85</td>
+                            <td>BA</td>
+                        </tr>
+                        <tr>
+                            <td>Matematik</td>
+                            <td>75</td>
+                            <td>CC</td>
+                        </tr>
+                        <tr>
+                            <td>Tarih</td>
+                            <td>68</td>
+                            <td>DC</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
