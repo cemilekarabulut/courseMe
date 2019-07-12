@@ -23,5 +23,9 @@ namespace course_app.Models
         public registrar registrar { get; set; }
         public section section { get; set; }
         public List<student_main_page> student_Main_Pages { get; set; }
+        public List<student_list> students { get; set; }
+        public int section_id { get; set; }
+        public string course_name { get; set; }
+        
     }
 }

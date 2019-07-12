@@ -1,4 +1,4 @@
-﻿
+﻿@model course_app.Models.Ornek
 @{
     ViewBag.Title = "addCourse";
 }
@@ -24,8 +24,8 @@
     <div class="container target">
         <div class="row">
             <div class="col-sm-10">
-                <h1 class="">@Html.ActionLink("Cemile Karabulut", "student", "Course", null, new { @style = "text-decoration:none" })</h1>
-                @Html.ActionLink("Add Course", "addCourse", "Course", null, new { @class = "btn btn-primary btn-success" })
+                <h1 class="">@Html.ActionLink(Model.student.name.ToString() + " " + Model.student.surname.ToString(), "student", "Course", Model.student, new { @style = "text-decoration:none" })</h1>
+                @Html.ActionLink("Add Course", "addCourse", "Course", Model.student, new { @class = "btn btn-primary btn-success" })
                 @Html.ActionLink("Grades", "grades", "Course", null, new { @class = "btn btn-primary btn-info" })
 
                 @Html.ActionLink("Logout", "Index", "Course", null, new { @class = "btn btn-primary btn-danger" })
@@ -42,12 +42,12 @@
                 <!--left col-->
                 <ul class="list-group">
                     <li class="list-group-item text-muted" contenteditable="false">Profile</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">ID  </strong></span> 852636541</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Name</strong></span> Cemile</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Surname</strong></span> Karabulut</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Age</strong></span> 18</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Mail </strong></span> cemile@gmail.com </li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Gender </strong></span> Female</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">ID  </strong></span> @Html.DisplayFor(model => model.student.id)</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Name</strong></span> @Html.DisplayFor(model => model.student.name)</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Surname</strong></span> @Html.DisplayFor(model => model.student.surname)</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Age</strong></span> @Html.DisplayFor(model => model.student.age)</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Mail </strong></span> @Html.DisplayFor(model => model.student.email) </li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Gender </strong></span> @Html.DisplayFor(model => model.student.gender)</li>
                 </ul>
 
 
@@ -56,24 +56,22 @@
             <div class="col-sm-9" style="" contenteditable="false">
                 <div class="panel panel-default">
                     <div class="panel-heading">Course List </div>
-                    <div class="panel-body">
-                        <h4>Fizik</h4>
-                        <ul>
-                            <button type="button" class="btn btn-success pull-right">Add</button>
-                            <li>Date :</li>
-                            <li>Instructor: </li>
-                        </ul>
-                        <hr>
-                    </div>
-                    <div class="panel-body">
-                        <h4>Fizik</h4>
-                        <ul>
-                            <button type="button" class="btn btn-success pull-right">Add</button>
-                            <li>Date :</li>
-                            <li>Instructor: </li>
-                        </ul>
-                        <hr>
-                    </div>
+                    @foreach (var item in Model.student_Main_Pages)
+                    {
+                        <div class="panel-body">
+                            <h4>@Html.DisplayFor(modelItem => item.course_name)-Section:@Html.DisplayFor(modelItem => item.section_id)</h4>
+                            <ul>
+                                @{ Model.student.section_id = item.section_id;
+                                }
+                                @Html.ActionLink("Add", "add_button_student", "Course", Model.student, new { @class = "btn  btn-success pull-right" })
+
+                                <li>Date:@Html.DisplayFor(modelItem => item.section_date)</li>
+                                <li>Instructor:@Html.DisplayFor(modelItem => item.instructor_name) </li>
+                            </ul>
+                            <hr>
+                        </div>
+                    }
+
                 </div>
             </div>
         </div>

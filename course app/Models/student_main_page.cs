@@ -10,5 +10,7 @@ namespace course_app.Models
         public string course_name { get; set; }
         public string section_date { get; set; }
         public string instructor_name { get; set; }
+        public int section_id { get; set; }
+        public int grade { get; set; }
     }
 }

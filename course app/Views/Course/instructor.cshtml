@@ -1,4 +1,4 @@
-﻿
+﻿@model course_app.Models.Ornek
 @{
     ViewBag.Title = "instructor";
 }
@@ -22,7 +22,7 @@
     <div class="container target">
         <div class="row">
             <div class="col-sm-10">
-                <h1 class="">@Html.ActionLink("Onat Çakır", "instructor", "Course", null, new { @style = "text-decoration:none" })</h1>
+                <h1 class="">@Html.ActionLink(Model.instructor.name.ToString() + " " + Model.instructor.surname.ToString(), "instructor", "Course", Model.instructor, new { @style = "text-decoration:none" })</h1>
 
 
                 @Html.ActionLink("Logout", "Index", "Course", null, new { @class = "btn btn-primary btn-danger" })
@@ -39,12 +39,12 @@
                 <!--left col-->
                 <ul class="list-group">
                     <li class="list-group-item text-muted" contenteditable="false">Profile</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">ID  </strong></span> 87654566541</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Name</strong></span> Onat</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Surname</strong></span> Çakır</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Age</strong></span> 39</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Mail </strong></span> onat@gmail.com </li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Gender </strong></span> Male</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">ID  </strong></span> @Html.DisplayFor(model => model.instructor.id)</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Name</strong></span> @Html.DisplayFor(model => model.instructor.name)</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Surname</strong></span>  @Html.DisplayFor(model => model.instructor.surname)</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Age</strong></span>  @Html.DisplayFor(model => model.instructor.age)</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Mail </strong></span>  @Html.DisplayFor(model => model.instructor.email) </li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Gender </strong></span>  @Html.DisplayFor(model => model.instructor.gender)</li>
                 </ul>
 
 
@@ -53,27 +53,33 @@
             <div class="col-sm-9" style="" contenteditable="false">
                 <div class="panel panel-default">
                     <div class="panel-heading">Courses</div>
-                    <div class="panel-body">
-                        <h4>Fizik</h4>
-                        <ul>
-                            <button type="button" class="btn btn-danger pull-right">Delete</button>
-                            @Html.ActionLink("Show Student List", "showStudent", "Course", null, new { @class = "btn btn-primary btn-success pull-right" })
-                        
-                            <li>Date :</li>
-                            <li>Section :</li>
-                        </ul>
-                        <hr>
-                    </div>
-                    <div class="panel-body">
-                        <h4>Matematik</h4>
-                        <ul>
-                            <button type="button" class="btn btn-danger pull-right">Delete</button>
-                            <button type="button" class="btn btn-success pull-right ">Show Student List</button>
-                            <li>Date :</li>
-                            <li>Section :</li>
-                        </ul>
-                        <hr>
-                    </div>
+                    @foreach (var item in Model.student_Main_Pages)
+                    {
+                        <div class="panel-body">
+                            <h4>@Html.DisplayFor(modelItem => item.course_name)</h4>
+                            <ul>
+                                @{ Model.instructor.section_id = item.section_id;
+                                }
+                                @Html.ActionLink("Delete", "delete_course_instructor", "Course", Model.instructor, new { @class = "btn  btn-danger pull-right" })
+                                @Html.ActionLink("Show Student List", "showStudent", "Course", Model.instructor, new { @class = "btn btn-primary btn-success pull-right" })
+                                <li>Date:@Html.DisplayFor(modelItem => item.section_date)</li>
+                                <li>Section:@Html.DisplayFor(modelItem => item.section_id) </li>
+                            </ul>
+                            <hr>
+                        </div>
+                    }
+                    @*<div class="panel-body">
+            <h4>Fizik</h4>
+            <ul>
+                <button type="button" class="btn btn-danger pull-right">Delete</button>
+                @Html.ActionLink("Show Student List", "showStudent", "Course", null, new { @class = "btn btn-primary btn-success pull-right" })
+
+                <li>Date :</li>
+                <li>Section :</li>
+            </ul>
+            <hr>
+        </div>*@
+
                 </div>
             </div>
         </div>

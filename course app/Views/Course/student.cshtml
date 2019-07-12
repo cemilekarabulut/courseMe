@@ -25,11 +25,11 @@
         <div class="row">
             <div class="col-sm-10">
                 
-                <h1 class="">@Html.ActionLink(Model.student.name.ToString()+" "+ Model.student.surname.ToString(), "student", "Course", null, new { @style = "text-decoration:none" })</h1>
-                @Html.ActionLink("Add Course", "addCourse", "Course", null, new { @class = "btn btn-primary btn-success" })
+                <h1 class="">@Html.ActionLink(Model.student.name.ToString()+" "+ Model.student.surname.ToString(), "student", "Course", Model.student, new { @style = "text-decoration:none" })</h1>
+                @Html.ActionLink("Add Course", "addCourse", "Course",Model.student, new { @class = "btn btn-primary btn-success" })
 
 
-                @Html.ActionLink("Grades", "grades", "Course", null, new { @class = "btn btn-primary btn-info" })
+                @Html.ActionLink("Grades", "grades", "Course", Model.student, new { @class = "btn btn-primary btn-info" })
                 @Html.ActionLink("Logout", "Index", "Course", null, new { @class = "btn btn-primary btn-danger" })
                 <br>
             </div>
@@ -58,24 +58,22 @@
             <div class="col-sm-9" style="" contenteditable="false">
                 <div class="panel panel-default">
                     <div class="panel-heading">Courses</div>
+                    @foreach (var item in Model.student_Main_Pages)
+                    {
                     <div class="panel-body">
-                        <h4>Fizik</h4>
+                        <h4>@Html.DisplayFor(modelItem => item.course_name)-Section:@Html.DisplayFor(modelItem => item.section_id)</h4>
                         <ul>
-                            <button type="button" class="btn btn-danger pull-right">Delete</button>
-                            <li>Date:</li>
-                            <li>Instructor: </li>
+                            @{ Model.student.section_id = item.section_id;
+                                }
+                            @Html.ActionLink("Delete", "delete_button_student", "Course",Model.student , new { @class = "btn  btn-danger pull-right" })
+                           
+                            <li>Date:@Html.DisplayFor(modelItem => item.section_date)</li>
+                            <li>Instructor:@Html.DisplayFor(modelItem => item.instructor_name) </li>
                         </ul>
                         <hr>
                     </div>
-                    <div class="panel-body">
-                        <h4>Fizik</h4>
-                        <ul>
-                            <button type="button" class="btn btn-danger pull-right">Delete</button>
-                            <li>Date :</li>
-                            <li>Instructor: </li>
-                        </ul>
-                        <hr>
-                    </div>
+                    }
+                    
                 </div>
             </div>
         </div>

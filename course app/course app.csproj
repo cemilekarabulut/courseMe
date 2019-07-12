@@ -132,6 +132,7 @@
     <Compile Include="Models\registrar.cs" />
     <Compile Include="Models\section.cs" />
     <Compile Include="Models\student.cs" />
+    <Compile Include="Models\student_list.cs" />
     <Compile Include="Models\student_main_page.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

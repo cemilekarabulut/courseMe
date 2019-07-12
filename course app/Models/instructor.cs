@@ -17,5 +17,8 @@ namespace course_app.Models
         public string password { get; set; }
         public byte[] image { get; set; }
         public string field { get; set; }
+        public int section_id { get; set; }
+        public int student_id { get; set; }
+        public int grade { get; set; }
     }
 }

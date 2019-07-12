@@ -1,6 +1,7 @@
-﻿
+﻿@model course_app.Models.Ornek
 @{
     ViewBag.Title = "grades";
+    var x="";
 }
 
 
@@ -24,10 +25,11 @@
     <div class="container target">
         <div class="row">
             <div class="col-sm-10">
-                <h1 class="">@Html.ActionLink("Cemile Karabulut", "student", "Course", null, new { @style = "text-decoration:none" })</h1>
-
-                @Html.ActionLink("Add Course", "addCourse", "Course", null, new { @class = "btn btn-primary btn-success" })
+                <h1 class="">
+               @Html.ActionLink(Model.student.name.ToString() + " " + Model.student.surname.ToString(), "student", "Course", Model.student, new { @style = "text-decoration:none" })</h1>
+               @Html.ActionLink("Add Course", "addCourse", "Course", Model.student, new { @class = "btn btn-primary btn-success" })
                 @Html.ActionLink("Grades", "grades", "Course", null, new { @class = "btn btn-primary btn-info" })
+
                 @Html.ActionLink("Logout", "Index", "Course", null, new { @class = "btn btn-primary btn-danger" })
                 <br>
             </div>
@@ -63,21 +65,53 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Fizik</td>
-                            <td>85</td>
-                            <td>BA</td>
-                        </tr>
-                        <tr>
-                            <td>Matematik</td>
-                            <td>75</td>
-                            <td>CC</td>
-                        </tr>
-                        <tr>
-                            <td>Tarih</td>
-                            <td>68</td>
-                            <td>DC</td>
-                        </tr>
+                        @foreach (var item in Model.student_Main_Pages)
+                        {
+                            <tr>
+                                @{ 
+                                    if (item.grade > 89)
+                                    {
+                                        x = "AA";
+                                    }
+                                    else if (item.grade>84)
+                                    {
+                                        x = "BA";
+                                    }
+                                    else if (item.grade > 79)
+                                    {
+                                        x = "BB";
+                                    }
+                                    else if (item.grade > 74)
+                                    {
+                                        x = "CB";
+                                    }
+                                    else if (item.grade > 69)
+                                    {
+                                        x = "CC";
+                                    }
+                                    else if (item.grade > 64)
+                                    {
+                                        x = "DC";
+                                    }
+                                    else if (item.grade > 59)
+                                    {
+                                        x = "DD";
+                                    }
+                                    else if (item.grade >49)
+                                    {
+                                        x = "FD";
+                                    }
+                                    else 
+                                    {
+                                        x = "FF";
+                                    }
+                                }
+                                <td>@Html.DisplayFor(modelItem => item.course_name)</td>
+                                <td>@Html.DisplayFor(modelItem => item.grade)</td>
+                                <td>@x</td>
+                            </tr>
+                          
+                        }
                     </tbody>
                 </table>
             </div>
