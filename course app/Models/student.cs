@@ -16,5 +16,6 @@ namespace course_app.Models
         public byte[] image{ get; set; }
         public int age { get; set; }
         public int section_id { get; set; }
+
     }
 }

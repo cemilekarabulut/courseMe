@@ -31,10 +31,7 @@ CREATE TABLE `parent` (
   `email` varchar(45) DEFAULT NULL,
   `password` varchar(45) DEFAULT NULL,
   `image` varbinary(64) DEFAULT NULL,
-  `studentId` int(2) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_studen` (`studentId`),
-  CONSTRAINT `fk_stu` FOREIGN KEY (`studentId`) REFERENCES `student` (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -44,7 +41,7 @@ CREATE TABLE `parent` (
 
 LOCK TABLES `parent` WRITE;
 /*!40000 ALTER TABLE `parent` DISABLE KEYS */;
-INSERT INTO `parent` VALUES (1,'ayşe','kol','female',38,'c@gmail.com','0000',NULL,NULL);
+INSERT INTO `parent` VALUES (1,'ayşe','kol','female',38,'c@gmail.com','0000',NULL);
 /*!40000 ALTER TABLE `parent` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -57,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-11 17:47:09
+-- Dump completed on 2019-07-17  8:55:43

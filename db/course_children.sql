@@ -16,34 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `instructor`
+-- Table structure for table `children`
 --
 
-DROP TABLE IF EXISTS `instructor`;
+DROP TABLE IF EXISTS `children`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `instructor` (
-  `id` int(2) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) DEFAULT NULL,
-  `surname` varchar(45) DEFAULT NULL,
-  `gender` varchar(45) DEFAULT NULL,
-  `age` int(11) DEFAULT NULL,
-  `email` varchar(45) DEFAULT NULL,
-  `password` varchar(45) DEFAULT NULL,
-  `image` varbinary(64) DEFAULT NULL,
-  `field` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE `children` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `studentId` int(2) DEFAULT NULL,
+  `parentId` int(2) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_par` (`parentId`),
+  KEY `fk_stu` (`studentId`),
+  CONSTRAINT `fk_par` FOREIGN KEY (`parentId`) REFERENCES `parent` (`id`),
+  CONSTRAINT `fk_stu` FOREIGN KEY (`studentId`) REFERENCES `student` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `instructor`
+-- Dumping data for table `children`
 --
 
-LOCK TABLES `instructor` WRITE;
-/*!40000 ALTER TABLE `instructor` DISABLE KEYS */;
-INSERT INTO `instructor` VALUES (1,'selçuk','ören','male',36,'b@gmail.com','8989',NULL,'phys'),(2,'mehmet','yılmaz','male',42,'z@gmail.com','0000',NULL,'math');
-/*!40000 ALTER TABLE `instructor` ENABLE KEYS */;
+LOCK TABLES `children` WRITE;
+/*!40000 ALTER TABLE `children` DISABLE KEYS */;
+INSERT INTO `children` VALUES (1,1,1),(2,2,1);
+/*!40000 ALTER TABLE `children` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -55,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-17  8:55:45
+-- Dump completed on 2019-07-17  8:55:46

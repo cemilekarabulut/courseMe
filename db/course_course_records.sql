@@ -30,9 +30,9 @@ CREATE TABLE `course_records` (
   PRIMARY KEY (`id`),
   KEY `fk_section` (`sectionId`),
   KEY `fk_student` (`studentId`),
-  CONSTRAINT `fk_section` FOREIGN KEY (`sectionId`) REFERENCES `section` (`id`),
-  CONSTRAINT `fk_student` FOREIGN KEY (`studentId`) REFERENCES `student` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `fk_section` FOREIGN KEY (`sectionId`) REFERENCES `section` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+  CONSTRAINT `fk_student` FOREIGN KEY (`studentId`) REFERENCES `student` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,6 +41,7 @@ CREATE TABLE `course_records` (
 
 LOCK TABLES `course_records` WRITE;
 /*!40000 ALTER TABLE `course_records` DISABLE KEYS */;
+INSERT INTO `course_records` VALUES (4,2,2,20),(8,4,1,100),(9,4,2,10);
 /*!40000 ALTER TABLE `course_records` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-11 17:47:09
+-- Dump completed on 2019-07-17  8:55:43

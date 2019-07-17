@@ -15,6 +15,6 @@ namespace course_app.Models
         public string password { get; set; }
         public int age { get; set; }
         public byte[] image { get; set; }
-        public int studentId { get; set; }
+       
     }
 }

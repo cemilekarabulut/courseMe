@@ -28,11 +28,11 @@ CREATE TABLE `section` (
   `instructorId` int(2) DEFAULT NULL,
   `date` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `id` (`courseId`),
   KEY `fk_id` (`instructorId`),
-  CONSTRAINT `fk_id` FOREIGN KEY (`instructorId`) REFERENCES `instructor` (`id`),
-  CONSTRAINT `id` FOREIGN KEY (`courseId`) REFERENCES `course` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `id` (`courseId`),
+  CONSTRAINT `fk_id` FOREIGN KEY (`instructorId`) REFERENCES `instructor` (`id`) ON DELETE RESTRICT,
+  CONSTRAINT `id` FOREIGN KEY (`courseId`) REFERENCES `course` (`id`) ON DELETE RESTRICT
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,6 +41,7 @@ CREATE TABLE `section` (
 
 LOCK TABLES `section` WRITE;
 /*!40000 ALTER TABLE `section` DISABLE KEYS */;
+INSERT INTO `section` VALUES (2,2,2,'2/2/2014'),(4,3,2,'15/5/2018');
 /*!40000 ALTER TABLE `section` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-11 17:47:09
+-- Dump completed on 2019-07-17  8:55:44

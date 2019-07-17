@@ -2,6 +2,15 @@
 @{
     ViewBag.Title = "showStudent";
     int a = 0;
+    if (Session["ActiveUser"] == null)
+    {
+        Response.Redirect("~/Course/Index");
+    }
+    else if (Session["ActiveUser"].ToString() != "instructor")
+    {
+        Response.Redirect("~/Course/Index");
+
+    }
 
 }
 
@@ -20,77 +29,91 @@
 
 
 </head>
-<body>
-    <div class="container target">
-        <div class="row">
-            <div class="col-sm-10">
-                <h1 class="">@Html.ActionLink(Model.instructor.name.ToString() + " " + Model.instructor.surname.ToString(), "instructor", "Course", Model.instructor, new { @style = "text-decoration:none" })</h1>
-                <hr>
-                <h2>@Html.DisplayFor(model => model.course_name)</h2>
-                <h3>Section @Html.DisplayFor(model => model.section_id)</h3>
+@{ if (Model.instructor.name != null)
+    {
+        <body>
+            <div class="container target">
+                <div class="row">
+                    <div class="col-sm-10">
+
+                        <h1 class="">@Html.ActionLink(Model.instructor.name.ToString() + " " + Model.instructor.surname.ToString(), "instructor", "Course", Model.instructor, new { @style = "text-decoration:none" })</h1>
+
+
+                        <hr>
+                        <h2>@Html.DisplayFor(model => model.course_name)</h2>
+                        <h3>Section @Html.DisplayFor(model => model.section_id)</h3>
+                        <br>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="/users" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="http://www.rlsandbox.com/img/profile.jpg"></a>
+
+                    </div>
+                </div>
                 <br>
-            </div>
-            <div class="col-sm-2">
-                <a href="/users" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="http://www.rlsandbox.com/img/profile.jpg"></a>
 
-            </div>
-        </div>
-        <br>
-        @using (Html.BeginForm("update_grade", "Course",Model.instructor, FormMethod.Post, new { id = "empform" }))
-        {
-            <table class="table">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Surname</th>
-                        <th scope="col">Grade</th>
-                        <th scope="col">Enter Grade</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.students)
-                    {
+                <table class="table">
+                    <thead class="thead-dark">
                         <tr>
-                            <th scope="row">@a</th>
-                            @{a++;}
-                            <td>@Html.DisplayFor(modelItem => item.student_id)</td>
-                            <td>@Html.DisplayFor(modelItem => item.student_name)</td>
-                            <td>@Html.DisplayFor(modelItem => item.student_surname)</td>
-                            <td>@Html.DisplayFor(modelItem => item.grade)</td>
-                            <td>
-                                <div class="col-sm-3">
-                                    @Html.TextBoxFor(model => model.instructor.grade, new { @class = "form-control", @type = "text" })
-                                    @{ Model.instructor.student_id = item.student_id;
-                                        Model.instructor.section_id = Model.section_id;
-                                    }
-                                </div>
-                                <button type="submit" class="btn btn-success">Confirm</button>
-
-                            </td>
+                            <th scope="col">#</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Surname</th>
+                            <th scope="col">Grade</th>
+                            <th scope="col">Enter Grade</th>
                         </tr>
-                                        }
-                    @*<tr>
-                        <th scope="row">1</th>
-                        <td>23</td>
-                        <td>Ali</td>
-                        <td>Poyraz</td>
-                        <td>85</td>
-                        <td>
-                            <div class="col-sm-3">
-                                <input class="form-control" id="ex1" type="text">
-                            </div>
-                            <button type="button" class="btn btn-success">Confirm</button>
-                        </td>
-                    </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.students)
+                        {
+                            Model.instructor.student_id = item.student_id;
+                            Model.instructor.section_id = Model.section_id;
+                            using (Html.BeginForm("update_grade", "Course", Model.instructor, FormMethod.Post, Model.instructor))
+                            {
+                                <tr>
+                                    <th scope="row">@a</th>
+                                    @{a++;}
+                                    <td>@Html.DisplayFor(modelItem => item.student_id)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.student_name)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.student_surname)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.grade)</td>
+                                    <td>
+                                        <div class="col-sm-3">
+                                            @Html.TextBoxFor(model => model.instructor.grade, new { @class = "form-control", @type = "text" })
 
-                    </tr>*@
+                                        </div>
+                                        <button type="submit" class="btn btn-success">Confirm</button>
 
-                </tbody>
-            </table>
-                                        }
-    </div>
-    <hr />
-</body>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        @*<tr>
+                                <th scope="row">1</th>
+                                <td>23</td>
+                                <td>Ali</td>
+                                <td>Poyraz</td>
+                                <td>85</td>
+                                <td>
+                                    <div class="col-sm-3">
+                                        <input class="form-control" id="ex1" type="text">
+                                    </div>
+                                    <button type="button" class="btn btn-success">Confirm</button>
+                                </td>
+                            </tr>
+
+                            </tr>*@
+
+                    </tbody>
+                </table>
+
+            </div>
+            <hr />
+        </body>
+    }
+    else
+    {
+
+        <h2> Where do yo think you're going?</h2>
+    }
+}
 </html>

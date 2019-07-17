@@ -1,6 +1,15 @@
-﻿
+﻿@model course_app.Models.Ornek
 @{
     ViewBag.Title = "parent";
+    var x = "";
+    if (Session["ActiveUser"] == null)
+    {
+        Response.Redirect("~/Course/Index");
+    }
+    else if (Session["ActiveUser"].ToString() != "parent")
+    {
+        Response.Redirect("~/Course/Index");
+    }
 }
 
 
@@ -18,117 +27,130 @@
 
 
 </head>
-<body>
+@{
+    if (Model.parent.name != null)
+    {
 
-    <hr class="">
-    <div class="container target">
-        <div class="row">
-            <div class="col-sm-10">
-                <h1 class="">Parent Information System</h1>
-                @Html.ActionLink("Logout", "Index", "Course", null, new { @class = "btn btn-primary btn-danger" })
-                <br>
-            </div>
-            <div class="col-sm-2">
-                <a href="/users" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="http://www.rlsandbox.com/img/profile.jpg"></a>
+        <body>
 
-            </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-sm-3">
-                <!--left col-->
-                <ul class="list-group">
-                    <li class="list-group-item text-muted" contenteditable="false">Profile</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Name</strong></span> Fahrettin</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Surname</strong></span> Poyraz</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Age</strong></span> 54</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Mail </strong></span> fahrettin@gmail.com </li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Gender </strong></span> Male</li>
-                </ul>
+            <hr class="">
+            <div class="container target">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <h1 class="">Parent Information System</h1>
+                        @Html.ActionLink("Logout", "Index", "Course", null, new { @class = "btn btn-primary btn-danger" })
+                        <br>
 
-
-            </div>
-            <!--/col-3-->
-            <div class="col-sm-9" style="" contenteditable="false">
-                <div class="panel panel-default">
-                    <div class="panel-heading"></div>
-                    <div class="panel-body">
-                        <h4 align="center" style="font-weight: bold;">Ali Poyraz</h4>
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Course</th>
-                                    <th scope="col">Section</th>
-                                    <th scope="col">Grade</th>
-                                    <th scope="col">Letter Grade</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Fizik</td>
-                                    <td>Section 5</td>
-                                    <td>90</td>
-                                    <td>AA</td>
-                                </tr>
-                            <tbody>
-                                <tr>
-                                    <td>Fizik</td>
-                                    <td>Section 5</td>
-                                    <td>90</td>
-                                    <td>AA</td>
-                                </tr>
-
-                            </tbody>
-                            </tbody>
-                        </table>
-                        <hr>
                     </div>
-                    <div class="panel-body">
-                        <h4 align="center" style="font-weight: bold;">Fatma Poyraz</h4>
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Course</th>
-                                    <th scope="col">Section</th>
-                                    <th scope="col">Grade</th>
-                                    <th scope="col">Letter Grade</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Fizik</td>
-                                    <td>Section 5</td>
-                                    <td>90</td>
-                                    <td>AA</td>
-                                </tr>
+                    <div class="col-sm-2">
+                        <a href="/users" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="http://www.rlsandbox.com/img/profile.jpg"></a>
 
-                            </tbody>
-                            <tbody>
-                                <tr>
-                                    <td>Fizik</td>
-                                    <td>Section 5</td>
-                                    <td>90</td>
-                                    <td>AA</td>
-                                </tr>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <!--left col-->
+                        <ul class="list-group">
+                            <li class="list-group-item text-muted" contenteditable="false">Profile</li>
+                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Name</strong></span> @Html.DisplayFor(model => model.parent.name)</li>
+                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Surname</strong></span> @Html.DisplayFor(model => model.parent.surname)</li>
+                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Age</strong></span> @Html.DisplayFor(model => model.parent.age)</li>
+                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Mail </strong></span>@Html.DisplayFor(model => model.parent.email) </li>
+                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Gender </strong></span> @Html.DisplayFor(model => model.parent.gender)</li>
+                        </ul>
 
-                            </tbody>
-                            <tbody>
-                                <tr>
-                                    <td>Fizik</td>
-                                    <td>Section 5</td>
-                                    <td>90</td>
-                                    <td>AA</td>
-                                </tr>
 
-                            </tbody>
-                        </table>
-                        <hr>
+                    </div>
+                    <!--/col-3-->
+
+                    <div class="col-sm-9" style="" contenteditable="false">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"></div>
+                            @foreach (var item in Model.students)
+                            {
+                                <div class="panel-body">
+                                    <h4 align="center" style="font-weight: bold;">@Html.DisplayFor(modelItem => item.student_name)</h4>
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Course</th>
+                                                <th scope="col">Section</th>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Grade</th>
+                                                <th scope="col">Letter Grade</th>
+
+                                            </tr>
+                                        </thead>
+                                        @foreach (var item1 in item.student_s)
+                                        {
+                                        <tbody>
+                                            <tr>
+
+                                                <td>@Html.DisplayFor(modelItem => item1.course_name)</td>
+                                                <td>Section @Html.DisplayFor(modelItem => item1.section_id)</td>
+                                                <td>@Html.DisplayFor(modelItem => item1.section_date)</td>
+                                                <td>@Html.DisplayFor(modelItem => item1.grade)</td>
+                                                
+                                                    @{
+                                                        if (item1.grade > 89)
+                                                        {
+                                                            x = "AA";
+                                                        }
+                                                        else if (item1.grade > 84)
+                                                        {
+                                                            x = "BA";
+                                                        }
+                                                        else if (item1.grade > 79)
+                                                        {
+                                                            x = "BB";
+                                                        }
+                                                        else if (item1.grade > 74)
+                                                        {
+                                                            x = "CB";
+                                                        }
+                                                        else if (item1.grade > 69)
+                                                        {
+                                                            x = "CC";
+                                                        }
+                                                        else if (item1.grade > 64)
+                                                        {
+                                                            x = "DC";
+                                                        }
+                                                        else if (item1.grade > 59)
+                                                        {
+                                                            x = "DD";
+                                                        }
+                                                        else if (item1.grade > 49)
+                                                        {
+                                                            x = "FD";
+                                                        }
+                                                        else
+                                                        {
+                                                            x = "FF";
+                                                        }
+                                                    }
+                                                    <td>@x</td>
+
+                                                </tr>
+
+                                            </tbody>
+                                        }
+                                    </table>
+                                    <hr>
+                                </div>}
+
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <hr />
-</body>
+            <hr />
+        </body>
+    }
+    else
+    {
+        <h2> Where do yo think you're going?</h2>
+    }
+}
 </html>
 

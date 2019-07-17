@@ -1,7 +1,15 @@
 ﻿@model course_app.Models.Ornek
 @{
     ViewBag.Title = "grades";
-    var x="";
+    var x = "";
+    if (Session["ActiveUser"] == null)
+    {
+        Response.Redirect("~/Course/Index");
+    }
+    else if (Session["ActiveUser"].ToString() != "student")
+    {
+        Response.Redirect("~/Course/Index");
+    }
 }
 
 
@@ -19,104 +27,115 @@
 
 
 </head>
-<body>
+@{
+    if (Model.student.name != null)
+    {
+        <body>
 
-    <hr class="">
-    <div class="container target">
-        <div class="row">
-            <div class="col-sm-10">
-                <h1 class="">
-               @Html.ActionLink(Model.student.name.ToString() + " " + Model.student.surname.ToString(), "student", "Course", Model.student, new { @style = "text-decoration:none" })</h1>
-               @Html.ActionLink("Add Course", "addCourse", "Course", Model.student, new { @class = "btn btn-primary btn-success" })
-                @Html.ActionLink("Grades", "grades", "Course", null, new { @class = "btn btn-primary btn-info" })
+            <hr class="">
+            <div class="container target">
+                <div class="row">
+                    <div class="col-sm-10">
 
-                @Html.ActionLink("Logout", "Index", "Course", null, new { @class = "btn btn-primary btn-danger" })
+                        <h1 class="">@Html.ActionLink(Model.student.name.ToString() + " " + Model.student.surname.ToString(), "student", "Course", Model.student, new { @style = "text-decoration:none" })</h1>
+
+                        @Html.ActionLink("Add Course", "addCourse", "Course", Model.student, new { @class = "btn btn-primary btn-success" })
+                        @Html.ActionLink("Grades", "grades", "Course", Model.student, new { @class = "btn btn-primary btn-info" })
+
+                        @Html.ActionLink("Logout", "Index", "Course", null, new { @class = "btn btn-primary btn-danger" })
+                        <br>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="/users" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="http://www.rlsandbox.com/img/profile.jpg"></a>
+
+                    </div>
+                </div>
                 <br>
-            </div>
-            <div class="col-sm-2">
-                <a href="/users" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="http://www.rlsandbox.com/img/profile.jpg"></a>
-
-            </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-sm-3">
-                <!--left col-->
-                <ul class="list-group">
-                    <li class="list-group-item text-muted" contenteditable="false">Profile</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">ID  </strong></span> 852636541</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Name</strong></span> Cemile</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Surname</strong></span> Karabulut</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Age</strong></span> 18</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Mail </strong></span> cemile@gmail.com </li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Gender </strong></span> Female</li>
-                </ul>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <!--left col-->
+                        <ul class="list-group">
+                            <li class="list-group-item text-muted" contenteditable="false">Profile</li>
+                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">ID  </strong></span> 852636541</li>
+                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Name</strong></span> Cemile</li>
+                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Surname</strong></span> Karabulut</li>
+                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Age</strong></span> 18</li>
+                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Mail </strong></span> cemile@gmail.com </li>
+                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Gender </strong></span> Female</li>
+                        </ul>
 
 
-            </div>
-            <!--/col-3-->
-            <div class="col-sm-9" style="" contenteditable="false">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Grade</th>
-                            <th scope="col">Letter Grade</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.student_Main_Pages)
-                        {
-                            <tr>
-                                @{ 
-                                    if (item.grade > 89)
-                                    {
-                                        x = "AA";
-                                    }
-                                    else if (item.grade>84)
-                                    {
-                                        x = "BA";
-                                    }
-                                    else if (item.grade > 79)
-                                    {
-                                        x = "BB";
-                                    }
-                                    else if (item.grade > 74)
-                                    {
-                                        x = "CB";
-                                    }
-                                    else if (item.grade > 69)
-                                    {
-                                        x = "CC";
-                                    }
-                                    else if (item.grade > 64)
-                                    {
-                                        x = "DC";
-                                    }
-                                    else if (item.grade > 59)
-                                    {
-                                        x = "DD";
-                                    }
-                                    else if (item.grade >49)
-                                    {
-                                        x = "FD";
-                                    }
-                                    else 
-                                    {
-                                        x = "FF";
-                                    }
+                    </div>
+                    <!--/col-3-->
+                    <div class="col-sm-9" style="" contenteditable="false">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Grade</th>
+                                    <th scope="col">Letter Grade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.student_Main_Pages)
+                                {
+                                    <tr>
+                                        @{
+                                            if (item.grade > 89)
+                                            {
+                                                x = "AA";
+                                            }
+                                            else if (item.grade > 84)
+                                            {
+                                                x = "BA";
+                                            }
+                                            else if (item.grade > 79)
+                                            {
+                                                x = "BB";
+                                            }
+                                            else if (item.grade > 74)
+                                            {
+                                                x = "CB";
+                                            }
+                                            else if (item.grade > 69)
+                                            {
+                                                x = "CC";
+                                            }
+                                            else if (item.grade > 64)
+                                            {
+                                                x = "DC";
+                                            }
+                                            else if (item.grade > 59)
+                                            {
+                                                x = "DD";
+                                            }
+                                            else if (item.grade > 49)
+                                            {
+                                                x = "FD";
+                                            }
+                                            else
+                                            {
+                                                x = "FF";
+                                            }
+                                        }
+                                        <td>@Html.DisplayFor(modelItem => item.course_name)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.grade)</td>
+                                        <td>@x</td>
+                                    </tr>
+
                                 }
-                                <td>@Html.DisplayFor(modelItem => item.course_name)</td>
-                                <td>@Html.DisplayFor(modelItem => item.grade)</td>
-                                <td>@x</td>
-                            </tr>
-                          
-                        }
-                    </tbody>
-                </table>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <hr />
-</body>
+            <hr />
+        </body>
+    }
+    else
+    {
+
+        <h2> Where do yo think you're going?</h2>
+    }
+}
 </html>
