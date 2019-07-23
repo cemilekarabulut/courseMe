@@ -11,6 +11,7 @@ namespace course_app.Controllers
 {
     public class CourseController : Controller
     {
+
         MySqlConnection conn = new MySqlConnection("database= course; datasource = localhost; port = 3306; username = root; password =0000;");
         // GET: Course
         [HttpPost]
@@ -112,7 +113,38 @@ namespace course_app.Controllers
                 return RedirectToAction("instructor", instructor);
             }
             else if (str == "registrar")
-                return View("registrar");
+            {
+                Session.Add("ActiveUser", str);
+                conn.Open();
+                MySqlCommand cmd2 = new MySqlCommand($"select * from registrar where email='{a.email}' and password='{a.password}';", conn);
+
+                MyReader = cmd2.ExecuteReader();
+                while (MyReader.Read())
+                {
+                    //Console.WriteLine(MyReader["title"].ToString());
+                    user.Add(MyReader["id"].ToString());
+                    user.Add(MyReader["name"].ToString());
+                    user.Add(MyReader["surname"].ToString());
+                    user.Add(MyReader["gender"].ToString());
+                    user.Add(MyReader["age"].ToString());
+                    user.Add(MyReader["email"].ToString());
+                    user.Add(MyReader["password"].ToString());
+
+                }
+
+                conn.Close();
+                registrar registrar = new registrar();
+                registrar.id = Convert.ToInt32(user[0]);
+                registrar.name = user[1];
+                registrar.surname = user[2];
+                registrar.gender = user[3];
+                registrar.age = Convert.ToInt32(user[4]);
+                registrar.email = user[5];
+                registrar.password = user[6];
+
+                return RedirectToAction("registrar", registrar);
+            }
+
 
             else
             {
@@ -144,7 +176,7 @@ namespace course_app.Controllers
                 parent.email = user[5];
                 parent.password = user[6];
                 return RedirectToAction("parent", parent);
-                
+
             }
         }
 
@@ -163,7 +195,7 @@ namespace course_app.Controllers
 
         public ActionResult student(student student)
         {
-           
+
             List<student_main_page> p = new List<student_main_page>();
             //SELECT s.date,c.name,i.name FROM course_records cr left outer join section s on cr.sectionId = s.id left outer join course c on s.courseId=c.id left outer join instructor i on i.id=s.instructorId group BY cr.id ORDER BY cr.id;
             conn.Open();
@@ -173,7 +205,7 @@ namespace course_app.Controllers
             while (MyReader.Read())
             {
                 //Console.WriteLine(MyReader["title"].ToString());
-                p.Add(new student_main_page() { section_date = MyReader["date"].ToString(), course_name = MyReader["name"].ToString(), instructor_name = MyReader["names"].ToString() + " " + MyReader["surname"].ToString(), section_id = Convert.ToInt32(MyReader["id"])});
+                p.Add(new student_main_page() { section_date = MyReader["date"].ToString(), course_name = MyReader["name"].ToString(), instructor_name = MyReader["names"].ToString() + " " + MyReader["surname"].ToString(), section_id = Convert.ToInt32(MyReader["id"]) });
             }
 
             conn.Close();
@@ -188,7 +220,7 @@ namespace course_app.Controllers
         //{
         //    return View();
         //}
-        
+
         [AcceptVerbs(HttpVerbs.Get)]
 
         public ActionResult Signup()
@@ -202,21 +234,29 @@ namespace course_app.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Signup(student user)
         {
+            //if (user.name == null || user.surname == null || user.email == null || user.password == null || user.gender == null || user.age==0) {
+            //    return View("error");
+            //}
+            if (ModelState.IsValid == true)
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand($"insert into student(name,surname,email,password,age,gender) values('{user.name}', '{user.surname}', '{user.email}', '{user.password}', '{user.age}', '{user.gender}');", conn);
+                MySqlCommand cmd2 = new MySqlCommand($"insert into login(email,password,title) values( '{user.email}', '{user.password}', 'student');", conn);
+                MySqlDataReader MyReader;
+                MyReader = cmd.ExecuteReader();
+                conn.Close();
+                conn.Open();
+                MyReader = cmd2.ExecuteReader();
+                conn.Close();
 
 
-            conn.Open();
-            MySqlCommand cmd = new MySqlCommand($"insert into student(name,surname,email,password,age,gender) values('{user.name}', '{user.surname}', '{user.email}', '{user.password}', '{user.age}', '{user.gender}');", conn);
-            MySqlCommand cmd2 = new MySqlCommand($"insert into login(email,password,title) values( '{user.email}', '{user.password}', 'student');", conn);
-            MySqlDataReader MyReader;
-            MyReader = cmd.ExecuteReader();
-            conn.Close();
-            conn.Open();
-            MyReader = cmd2.ExecuteReader();
-            conn.Close();
 
+                return View("Index");
+            }
+            else
+                ModelState.AddModelError("Error", "Lütfen hataları gideriniz.");
 
-
-            return View("Index");
+            return View(user);
 
         }
 
@@ -239,14 +279,14 @@ namespace course_app.Controllers
 
             conn.Close();
             conn.Open();
-            MySqlCommand cmd = new MySqlCommand($"select s.id,c.name,i.name as names,s.date from section s left outer join course c on c.id=s.courseId left outer join instructor i on i.id= s.instructorId", conn);
+            MySqlCommand cmd = new MySqlCommand($"select s.id,c.name,i.name as names,i.surname,s.date from section s left outer join course c on c.id=s.courseId left outer join instructor i on i.id= s.instructorId", conn);
 
             MyReader = cmd.ExecuteReader();
             while (MyReader.Read())
             {
                 if (!p.Contains(Convert.ToInt32(MyReader["id"])))
                 {
-                    page.Add(new student_main_page { section_id = Convert.ToInt32(MyReader["id"]), course_name = MyReader["name"].ToString(), instructor_name = MyReader["names"].ToString(), section_date = MyReader["date"].ToString() });
+                    page.Add(new student_main_page { section_id = Convert.ToInt32(MyReader["id"]), course_name = MyReader["name"].ToString(), instructor_name = MyReader["names"].ToString()+" "+ MyReader["surname"].ToString(), section_date = MyReader["date"].ToString() });
                 }
             }
 
@@ -261,16 +301,20 @@ namespace course_app.Controllers
         {
             List<student_main_page> p = new List<student_main_page>();
             conn.Open();
-            MySqlCommand cmd2 = new MySqlCommand($"SELECT cr.grade,c.name,s.id FROM (select * from course_records cr1 where cr1.studentId={student.id}) cr left outer join section s on cr.sectionId = s.id left outer join course c on s.courseId=c.id left outer join instructor i on i.id=s.instructorId group BY cr.id ORDER BY cr.id;", conn);
+            MySqlCommand cmd2 = new MySqlCommand($"SELECT cr.midterm,c.name,s.id,cr.final FROM (select * from course_records cr1 where cr1.studentId={student.id}) cr left outer join section s on cr.sectionId = s.id left outer join course c on s.courseId=c.id left outer join instructor i on i.id=s.instructorId group BY cr.id ORDER BY cr.id;", conn);
             MySqlDataReader MyReader;
             MyReader = cmd2.ExecuteReader();
             while (MyReader.Read())
             {
-                if (MyReader["grade"] == DBNull.Value)
-                    p.Add(new student_main_page() { course_name = MyReader["name"].ToString(), grade = 0 });
+                if (MyReader["midterm"] == DBNull.Value&& MyReader["final"] == DBNull.Value)
+                    p.Add(new student_main_page() { course_name = MyReader["name"].ToString(), midterm = -2 ,final=-2});
+               else if (MyReader["midterm"] == DBNull.Value)
+                    p.Add(new student_main_page() { course_name = MyReader["name"].ToString(), midterm = -2, final = Convert.ToDouble(MyReader["final"]) });
                 //Console.WriteLine(MyReader["title"].ToString());
+                else if(MyReader["final"] == DBNull.Value)
+                    p.Add(new student_main_page() { course_name = MyReader["name"].ToString(), midterm = Convert.ToDouble(MyReader["midterm"]),final=-2 });
                 else
-                    p.Add(new student_main_page() {  course_name = MyReader["name"].ToString(),grade=Convert.ToInt32(MyReader["grade"]) });
+                    p.Add(new student_main_page() { course_name = MyReader["name"].ToString(), midterm = Convert.ToDouble(MyReader["midterm"]), final = Convert.ToDouble(MyReader["final"]) });
             }
 
             conn.Close();
@@ -279,7 +323,7 @@ namespace course_app.Controllers
             ornek.student = student;
             return View(ornek);
         }
-        
+
         public ActionResult delete_button_student(student stu)
         {
 
@@ -303,14 +347,14 @@ namespace course_app.Controllers
         {
             //SELECT s.date,c.name,i.name as names,i.surname,s.id FROM (select * from section  where instructorId={instructor.id}) s left outer join course c on s.courseId=c.id left outer join instructor i on i.id=s.instructorId group BY s.id ORDER BY s.id;
             List<student_main_page> p = new List<student_main_page>();
-              conn.Open();
-            MySqlCommand cmd2 = new MySqlCommand($"SELECT s.date,c.name,i.name as names,i.surname,s.id FROM (select * from section  where instructorId={instructor.id}) s left outer join course c on s.courseId=c.id left outer join instructor i on i.id=s.instructorId group BY s.id ORDER BY s.id;",conn);
+            conn.Open();
+            MySqlCommand cmd2 = new MySqlCommand($"SELECT s.date,c.name,i.name as names,i.surname,s.id FROM (select * from section  where instructorId={instructor.id}) s left outer join course c on s.courseId=c.id left outer join instructor i on i.id=s.instructorId group BY s.id ORDER BY s.id;", conn);
             MySqlDataReader MyReader;
             MyReader = cmd2.ExecuteReader();
             while (MyReader.Read())
             {
                 //Console.WriteLine(MyReader["title"].ToString());
-                p.Add(new student_main_page() { section_date = MyReader["date"].ToString(), course_name = MyReader["name"].ToString(),  section_id = Convert.ToInt32(MyReader["id"]) });
+                p.Add(new student_main_page() { section_date = MyReader["date"].ToString(), course_name = MyReader["name"].ToString(), section_id = Convert.ToInt32(MyReader["id"]) });
             }
             conn.Close();
             Ornek ornek = new Ornek();
@@ -323,49 +367,81 @@ namespace course_app.Controllers
         //{
         //    return View();
         //}
-        public ActionResult registrar()
+        public ActionResult registrar(registrar registrar)
         {
-            return PartialView();
+            List<student_main_page> p = new List<student_main_page>();
+            conn.Open();
+            MySqlCommand cmd2 = new MySqlCommand("select c.name as names,i.name,s.id,i.surname from course c left outer join section s on s.courseId=c.id left outer join instructor i on i.id=s.instructorId order by c.name", conn);
+            MySqlDataReader MyReader;
+            MyReader = cmd2.ExecuteReader();
+            while (MyReader.Read())
+            {
+                if (MyReader["id"] == DBNull.Value)
+                    p.Add(new student_main_page() { course_name = MyReader["names"].ToString() });
+                else
+                    p.Add(new student_main_page() { course_name = MyReader["names"].ToString(), instructor_name = MyReader["name"].ToString() + " " + MyReader["surname"].ToString(), section_id = Convert.ToInt32(MyReader["id"]) });
+                //Console.WriteLine(MyReader["title"].ToString());
+
+            }
+            conn.Close();
+            Ornek ornek = new Ornek();
+            ornek.student_Main_Pages = p;
+            ornek.registrar = registrar;
+
+            return View(ornek);
         }
-        [HttpPost]
-        public ActionResult registrar(string str)
-        {
-            return View();
-        }
+        //[HttpPost]
+        //public ActionResult registrar(string str)
+        //{
+        //    return View();
+        //}
         public ActionResult parent(parent parent)
         {
             List<student_list> kids = new List<student_list>();
             List<student_main_page> a = new List<student_main_page>();
             conn.Open();
-            MySqlCommand cmd = new MySqlCommand($"select cr.grade,st.name,st.surname,s.id,c.name as names,st.id as ids,s.date from (select * from children where parentId={parent.id}) ch left outer join student st on st.id=ch.studentId left outer join course_records cr on cr.studentId=ch.studentId left outer join section s on s.id=cr.sectionId left outer join course c on c.id=s.courseId order by st.id;", conn);
+            MySqlCommand cmd = new MySqlCommand($"select cr.midterm,st.name,st.surname,s.id,c.name as names,st.id as ids,s.date,cr.final from (select * from children where parentId={parent.id}) ch left outer join student st on st.id=ch.studentId left outer join course_records cr on cr.studentId=ch.studentId left outer join section s on s.id=cr.sectionId left outer join course c on c.id=s.courseId order by st.id;", conn);
             MySqlDataReader MyReader;
             MyReader = cmd.ExecuteReader();
             while (MyReader.Read())
             {
                 //Console.WriteLine(MyReader["title"].ToString());
-                kids.Add(new student_list() { course_name = MyReader["names"].ToString(), section_id = Convert.ToInt32(MyReader["id"]), student_name = MyReader["name"].ToString(), student_surname = MyReader["surname"].ToString(),grade = Convert.ToInt32(MyReader["grade"]) ,student_id= Convert.ToInt32(MyReader["ids"]),section_date= MyReader["date"].ToString() });
+                if (string.IsNullOrEmpty(MyReader["names"].ToString()))
+                {
+                        kids.Add(new student_list() { course_name = "", section_id = 0, student_name = MyReader["name"].ToString(), student_surname = MyReader["surname"].ToString(), midterm =-2, student_id = Convert.ToInt32(MyReader["ids"]), section_date ="" ,final=-2});
+                }
+                else {
+                    if (MyReader["midterm"] == DBNull.Value&& MyReader["final"] == DBNull.Value)
+                        kids.Add(new student_list() { course_name = MyReader["names"].ToString(), section_id = Convert.ToInt32(MyReader["id"]), student_name = MyReader["name"].ToString(), student_surname = MyReader["surname"].ToString(), midterm=-2,final=-2, student_id = Convert.ToInt32(MyReader["ids"]), section_date = MyReader["date"].ToString() });
+                    else if(MyReader["midterm"] == DBNull.Value)
+                             kids.Add(new student_list() { course_name = MyReader["names"].ToString(), section_id = Convert.ToInt32(MyReader["id"]), student_name = MyReader["name"].ToString(), student_surname = MyReader["surname"].ToString(), midterm = -2, final = Convert.ToDouble(MyReader["final"]), student_id = Convert.ToInt32(MyReader["ids"]), section_date = MyReader["date"].ToString() });
+                    else if (MyReader["final"] == DBNull.Value)
+                        kids.Add(new student_list() { course_name = MyReader["names"].ToString(), section_id = Convert.ToInt32(MyReader["id"]), student_name = MyReader["name"].ToString(), student_surname = MyReader["surname"].ToString(), midterm = Convert.ToDouble(MyReader["midterm"]), final =-2, student_id = Convert.ToInt32(MyReader["ids"]), section_date = MyReader["date"].ToString() });
+                    else
+                        kids.Add(new student_list() { course_name = MyReader["names"].ToString(), section_id = Convert.ToInt32(MyReader["id"]), student_name = MyReader["name"].ToString(), student_surname = MyReader["surname"].ToString(), midterm = Convert.ToDouble(MyReader["midterm"]),final = Convert.ToDouble(MyReader["final"]), student_id = Convert.ToInt32(MyReader["ids"]), section_date = MyReader["date"].ToString() });
+                }
             }
             for (int i = 0; i < kids.Count; i++)
             {
-                a.Add(new student_main_page() { course_name=kids[i].course_name,section_id=kids[i].section_id,grade=kids[i].grade, section_date = kids[i].section_date });
-                for (int j = i+1; j < kids.Count;)
+                a.Add(new student_main_page() { course_name = kids[i].course_name, section_id = kids[i].section_id, midterm= kids[i].midterm, section_date = kids[i].section_date,final=kids[i].final });
+                for (int j = i + 1; j < kids.Count;)
                 {
-                    
+
                     if (kids[i].student_id == kids[j].student_id)
                     {
-                        a.Add(new student_main_page() { course_name = kids[j].course_name, section_id = kids[j].section_id, grade = kids[j].grade ,section_date=kids[j].section_date});
+                        a.Add(new student_main_page() { course_name = kids[j].course_name, section_id = kids[j].section_id, midterm = kids[j].midterm, section_date = kids[j].section_date, final = kids[j].final });
                         kids.RemoveAt(j);
                     }
                     else
                         break;
                 }
-                kids[i].student_s = new List<student_main_page>(a) ;
+                kids[i].student_s = new List<student_main_page>(a);
                 a.RemoveRange(0, a.Count);
             }
-         
+
             conn.Close();
             Ornek ornek = new Ornek();
-            ornek.parent=parent;
+            ornek.parent = parent;
             ornek.students = kids;
             return PartialView(ornek);
         }
@@ -381,16 +457,20 @@ namespace course_app.Controllers
             string course_name = "";
             List<student_list> p = new List<student_list>();
             conn.Open();
-            MySqlCommand cmd2 = new MySqlCommand($"select st.id,st.name,st.surname,cr.grade,s.id as sectionid,c.name as coursename from (select * from course_records where sectionId={instructor.section_id}) cr left outer join student st on st.id=cr.studentId left outer join section s on s.id=cr.sectionId left outer join course c on c.id=s.courseId; ", conn);
+            MySqlCommand cmd2 = new MySqlCommand($"select st.id,st.name,st.surname,cr.midterm,s.id as sectionid,c.name as coursename,cr.final from (select * from course_records where sectionId={instructor.section_id}) cr left outer join student st on st.id=cr.studentId left outer join section s on s.id=cr.sectionId left outer join course c on c.id=s.courseId; ", conn);
             MySqlDataReader MyReader;
             MyReader = cmd2.ExecuteReader();
             while (MyReader.Read())
             {
                 //Console.WriteLine(MyReader["title"].ToString());
-                if (MyReader["grade"] == DBNull.Value)
-                    p.Add(new student_list() { student_name = MyReader["name"].ToString(), student_id = Convert.ToInt32(MyReader["id"]), student_surname = MyReader["surname"].ToString(), grade = 0 });
+                if (MyReader["midterm"] == DBNull.Value&& MyReader["final"] == DBNull.Value)
+                    p.Add(new student_list() { student_name = MyReader["name"].ToString(), student_id = Convert.ToInt32(MyReader["id"]), student_surname = MyReader["surname"].ToString(), midterm = -2,final=-2 });
+                else if(MyReader["final"] == DBNull.Value)
+                    p.Add(new student_list() { student_name = MyReader["name"].ToString(), student_id = Convert.ToInt32(MyReader["id"]), student_surname = MyReader["surname"].ToString(), midterm= Convert.ToDouble(MyReader["midterm"]), final = -2 });
+                else if (MyReader["midterm"] == DBNull.Value)
+                    p.Add(new student_list() { student_name = MyReader["name"].ToString(), student_id = Convert.ToInt32(MyReader["id"]), student_surname = MyReader["surname"].ToString(), final = Convert.ToDouble(MyReader["final"]), midterm = -2 });
                 else
-                    p.Add(new student_list() {  student_name = MyReader["name"].ToString(), student_id = Convert.ToInt32(MyReader["id"]) , student_surname = MyReader["surname"].ToString() , grade =Convert.ToDouble( MyReader["grade"] )});
+                    p.Add(new student_list() { student_name = MyReader["name"].ToString(), student_id = Convert.ToInt32(MyReader["id"]), student_surname = MyReader["surname"].ToString(), midterm = Convert.ToDouble(MyReader["midterm"]), final = Convert.ToDouble(MyReader["final"]) });
                 section_id = Convert.ToInt32(MyReader["sectionid"]);
                 course_name = MyReader["coursename"].ToString();
             }
@@ -413,17 +493,329 @@ namespace course_app.Controllers
             return RedirectToAction("instructor", instructor);
         }
 
-        public ActionResult update_grade(instructor instructor, instructor instructor2)
+        public ActionResult update_midterm(instructor instructor, instructor instructor2)
         {
             conn.Open();
-            MySqlCommand cmd2 = new MySqlCommand($"update course_records set grade={instructor.grade} where sectionId={instructor2.section_id} and studentId={instructor2.student_id}", conn);
-            MySqlDataReader MyReader;
+            MySqlCommand cmd2 = new MySqlCommand($"update course_records set midterm={instructor.midterm} where sectionId={instructor2.section_id} and studentId={instructor2.student_id}", conn);
+          
+              MySqlDataReader MyReader;
             MyReader = cmd2.ExecuteReader();
             conn.Close();
-            return RedirectToAction("showStudent",instructor2);
+            return RedirectToAction("showStudent", instructor2);
+        }
+        public ActionResult update_final(instructor instructor, instructor instructor2)
+        {
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand($"update course_records set final={instructor.final} where sectionId={instructor2.section_id} and studentId={instructor2.student_id}", conn);
+
+            MySqlDataReader MyReader;
+            MyReader = cmd.ExecuteReader();
+            conn.Close();
+            return RedirectToAction("showStudent", instructor2);
+        }
+       
+        public ActionResult ViewSection(registrar registrar)
+        {
+
+            List<student_list> p = new List<student_list>();
+            conn.Open();
+            MySqlCommand cmd2 = new MySqlCommand($"select st.id,st.name,st.surname,cr.midterm,s.id as sectionid,c.name as coursename,cr.final from (select * from course_records where sectionId={registrar.section_id}) cr left outer join student st on st.id=cr.studentId left outer join section s on s.id=cr.sectionId left outer join course c on c.id=s.courseId; ", conn);
+            MySqlDataReader MyReader;
+            MyReader = cmd2.ExecuteReader();
+            while (MyReader.Read())
+            {
+                //Console.WriteLine(MyReader["title"].ToString());
+                if (MyReader["midterm"] == DBNull.Value && MyReader["final"] == DBNull.Value)
+                    p.Add(new student_list() { student_name = MyReader["name"].ToString(), student_id = Convert.ToInt32(MyReader["id"]), student_surname = MyReader["surname"].ToString(), midterm = -2, final = -2 });
+                else if (MyReader["final"] == DBNull.Value)
+                    p.Add(new student_list() { student_name = MyReader["name"].ToString(), student_id = Convert.ToInt32(MyReader["id"]), student_surname = MyReader["surname"].ToString(), midterm = Convert.ToDouble(MyReader["midterm"]), final = -2 });
+                else if (MyReader["midterm"] == DBNull.Value)
+                    p.Add(new student_list() { student_name = MyReader["name"].ToString(), student_id = Convert.ToInt32(MyReader["id"]), student_surname = MyReader["surname"].ToString(), final = Convert.ToDouble(MyReader["final"]), midterm = -2 });
+                else
+                    p.Add(new student_list() { student_name = MyReader["name"].ToString(), student_id = Convert.ToInt32(MyReader["id"]), student_surname = MyReader["surname"].ToString(), midterm = Convert.ToDouble(MyReader["midterm"]), final = Convert.ToDouble(MyReader["final"]) });
+
+
+            }
+            conn.Close();
+            Ornek ornek = new Ornek();
+            ornek.registrar = registrar;
+            ornek.students = p;
+            //ornek.section_id = section_id;
+            //ornek.course_name = course_name;
+            return View(ornek);
+
+        }
+        public ActionResult studentList(registrar registrar)
+        {
+            List<student> p = new List<student>();
+            conn.Open();
+            MySqlCommand cmd2 = new MySqlCommand($"select st.id,st.name,st.surname,st.age,st.gender,st.email from student st order by st.id", conn);
+            MySqlDataReader MyReader;
+            MyReader = cmd2.ExecuteReader();
+            while (MyReader.Read())
+            {
+                //Console.WriteLine(MyReader["title"].ToString());
+
+                p.Add(new student() { age = Convert.ToInt32(MyReader["age"]), name = MyReader["name"].ToString(), id = Convert.ToInt32(MyReader["id"]), surname = MyReader["surname"].ToString(), gender = MyReader["gender"].ToString(), email = MyReader["email"].ToString() });
+
+
+
+            }
+            conn.Close();
+            Ornek ornek = new Ornek();
+            ornek.registrar = registrar;
+            ornek.studentList = p;
+            return View(ornek);
+        }
+        public static registrar temp=new registrar();
+        public ActionResult signTeacher(registrar registrar)
+        {
+           
+            temp = registrar;
+            return View();
         }
 
+        [HttpPost]
+        public ActionResult signTeacher(instructor instructor)
+        {
+            if (ModelState.IsValid == true)
+            { 
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand($"insert into instructor(name,surname,email,password,age,gender,field) values('{instructor.name}', '{instructor.surname}', '{instructor.email}', '{instructor.password}', '{instructor.age}', '{instructor.gender}','{instructor.field}');", conn);
+                MySqlCommand cmd2 = new MySqlCommand($"insert into login(email,password,title) values( '{instructor.email}', '{instructor.password}', 'instructor');", conn);
+                MySqlDataReader MyReader;
+                MyReader = cmd.ExecuteReader();
+                conn.Close();
+                conn.Open();
+                MyReader = cmd2.ExecuteReader();
+                conn.Close();
+                registrar registrar = new registrar();
+                registrar = temp;
+                temp = null;
+                return RedirectToAction("registrar",registrar);
+               
+          
+            }
+            else
+                ModelState.AddModelError("Error", "Lütfen hataları gideriniz.");
 
+            return View(instructor);
+            
+        }
+        
+        public  ActionResult signParent(registrar registrar)
+        {
+            temp = registrar;
+            return View();
+        }
+        [HttpPost]
+        public ActionResult signParent(parent parent)
+        {
+
+            if (ModelState.IsValid == true)
+
+            {
+                int temp_id=0;
+                MySqlDataReader MyReader;
+                
+                MySqlCommand cmd = new MySqlCommand($"insert into parent(name,surname,email,password,age,gender) values('{parent.name}', '{parent.surname}', '{parent.email}', '{parent.password}', '{parent.age}', '{parent.gender}');", conn);
+                MySqlCommand cmd2 = new MySqlCommand($"insert into login(email,password,title) values( '{parent.email}', '{parent.password}', 'parent');", conn);
+                MySqlCommand command = new MySqlCommand($"select parent.id from parent where email='{parent.email}' and password= '{parent.password}';", conn);
+                conn.Open();
+                MyReader = cmd.ExecuteReader();
+                conn.Close();
+                conn.Open();
+                MyReader = cmd2.ExecuteReader();
+                conn.Close();
+                conn.Open();
+                MyReader = command.ExecuteReader();
+                while (MyReader.Read())
+                {
+                    temp_id = Convert.ToInt32(MyReader["id"]);
+                }
+                conn.Close();
+                if(parent.student_id!=0)
+                {
+                    MySqlCommand cmd3 = new MySqlCommand($"insert into children(studentId,parentId) values('{parent.student_id}', '{temp_id}');", conn);
+
+
+
+                    conn.Open();
+                    MyReader = cmd3.ExecuteReader();
+                    conn.Close();
+                }
+                registrar registrar = new registrar();
+                registrar = temp;
+                temp = null;
+                return RedirectToAction("registrar", registrar);
+
+
+            }
+            else
+                ModelState.AddModelError("Error", "Lütfen hataları gideriniz.");
+
+            return View(parent);
+        }
+        public ActionResult createCourse(registrar registrar)
+        {
+            temp = registrar;
+            return View();
+        }
+        [HttpPost]
+        public ActionResult createCourse(course course)
+        {
+            if (ModelState.IsValid == true)
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand($"insert into course(name) values('{course.name}');", conn);
+               
+                MySqlDataReader MyReader;
+                MyReader = cmd.ExecuteReader();
+                conn.Close();
+               
+                registrar registrar = new registrar();
+                registrar = temp;
+                temp = null;
+                return RedirectToAction("registrar", registrar);
+
+
+            }
+            else
+                ModelState.AddModelError("", "Lütfen hataları gideriniz.");
+
+            return View(course);
+
+        }
+        public ActionResult addSection(registrar registrar)
+        {
+            List<string> p = new List<string>();
+            MySqlDataReader MyReader;
+            conn.Open();
+            MySqlCommand command = new MySqlCommand($"select name from course;", conn);
+            MyReader = command.ExecuteReader();
+            while (MyReader.Read())
+            {
+                p.Add(MyReader["name"].ToString());
+            }
+            conn.Close();
+            temp = registrar;
+            section section = new section();
+            section.course_names = p;
+            return View(section);
+        }
+        [HttpPost]
+        public ActionResult addSection(section section)
+        {
+            if (ModelState.IsValid == true)
+            {
+                string str = section.day + " " + section.hour;
+                int temp_id = 0;
+                MySqlDataReader MyReader;
+                conn.Open();
+                MySqlCommand command = new MySqlCommand($"select id from course where name='{section.course_name}';", conn);
+                MyReader = command.ExecuteReader();
+                while (MyReader.Read())
+                {
+                    temp_id = Convert.ToInt32(MyReader["id"]);
+                }
+                conn.Close();
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand($"insert into section(instructorId,courseId,date) values('{section.instructor_id}','{temp_id}','{str}');", conn);
+                MyReader = cmd.ExecuteReader();
+                conn.Close();
+
+                registrar registrar = new registrar();
+                registrar = temp;
+                temp = null;
+                return RedirectToAction("registrar", registrar);
+
+
+            }
+            else
+                ModelState.AddModelError("", "Lütfen hataları gideriniz.");
+
+            return View(section);
+
+        }
+        public static parent temp1 = new parent();
+        public ActionResult addChild(parent parent)
+        {
+            temp1 = parent;
+            return View();
+        }
+        [HttpPost]
+        public ActionResult addChild(children children)
+        {
+            if (ModelState.IsValid == true)
+            {
+                MySqlDataReader MyReader;
+                int temp_id = 0;
+                conn.Open();
+                MySqlCommand command = new MySqlCommand($"select id from parent where name='{temp1.name}' and surname='{temp1.surname}';", conn);
+                MyReader = command.ExecuteReader();
+                while (MyReader.Read())
+                {
+                    temp_id = Convert.ToInt32(MyReader["id"]);
+                }
+                conn.Close();
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand($"insert into children(parentId,studentId) values({temp_id},{children.student_id});", conn);
+
+
+                MyReader = cmd.ExecuteReader();
+                conn.Close();
+
+                parent parent = new parent();
+                parent = temp1;
+                temp1 = null;
+                return RedirectToAction("parent", parent);
+
+
+            }
+            else
+                ModelState.AddModelError("", "Lütfen hataları gideriniz.");
+
+            return View(children);
+
+        }
+        [HttpPost]
+        public ActionResult getInstructor(string x)
+        {
+            List<instructor> i = new List<instructor>();
+           string name = null;
+            MySqlDataReader MyReader;
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand($"select c.field from course c where name='{x}';", conn);
+            MyReader = cmd.ExecuteReader();
+            while (MyReader.Read())
+            {
+                name = MyReader["field"].ToString();
+            }
+            conn.Close();
+
+            conn.Open();
+            MySqlCommand command = new MySqlCommand($"select i.name,i.surname,i.id from instructor i where field='{name}';", conn);
+            MyReader = command.ExecuteReader();
+            while (MyReader.Read())
+            {
+                i.Add(new instructor() { name=MyReader["name"].ToString() + " " + MyReader["surname"].ToString(),id=Convert.ToInt32(MyReader["id"]) });
+            }
+            conn.Close();
+
+          return Json(i, JsonRequestBehavior.AllowGet);
+            
+            //return name;
+        }
+        public ActionResult DeleteSection(registrar registrar)
+        {
+            conn.Open();
+            MySqlDataReader my;
+            MySqlCommand cmd = new MySqlCommand($"delete from section where id={registrar.section_id}", conn);
+            my = cmd.ExecuteReader();
+            conn.Close();
+            return RedirectToAction("registrar",registrar);
+        }
+      
         public ActionResult addImage()
         {
 

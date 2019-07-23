@@ -81,18 +81,7 @@
                                     <hr>
                                 </div>
                             }
-                            @*<div class="panel-body">
-                                    <h4>Fizik</h4>
-                                    <ul>
-                                        <button type="button" class="btn btn-danger pull-right">Delete</button>
-                                        @Html.ActionLink("Show Student List", "showStudent", "Course", null, new { @class = "btn btn-primary btn-success pull-right" })
-
-                                        <li>Date :</li>
-                                        <li>Section :</li>
-                                    </ul>
-                                    <hr>
-                                </div>*@
-
+                     
                         </div>
                     </div>
                 </div>
@@ -102,7 +91,8 @@
     }
     else
     {
-        <h2> Where do yo think you're going?</h2>
+        <h3> Do you want to go to the mainpage?(If not you can go back to your page.)</h3>
+        @Html.ActionLink("Main Page", "Index", "Course", null, new { @class = "btn btn-primary btn-danger" })
     }
 }
 </html>

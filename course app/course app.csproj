@@ -115,6 +115,7 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\test.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +125,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\children.cs" />
     <Compile Include="Models\course.cs" />
     <Compile Include="Models\course_records.cs" />
     <Compile Include="Models\instructor.cs" />
@@ -159,6 +161,13 @@
     <Content Include="Views\Course\showStudent.cshtml" />
     <Content Include="Views\Course\addImage.cshtml" />
     <Content Include="Views\Course\retrieveImage.cshtml" />
+    <Content Include="Views\Course\ViewSection.cshtml" />
+    <Content Include="Views\Course\studentList.cshtml" />
+    <Content Include="Views\Course\signTeacher.cshtml" />
+    <Content Include="Views\Course\signParent.cshtml" />
+    <Content Include="Views\Course\createCourse.cshtml" />
+    <Content Include="Views\Course\addSection.cshtml" />
+    <Content Include="Views\Course\addChild.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

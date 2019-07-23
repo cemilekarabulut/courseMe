@@ -1,0 +1,49 @@
+﻿
+@model course_app.Models.course
+
+@{
+
+    ViewBag.Title = "createCourse";
+    if (Session["ActiveUser"] == null)
+    {
+        Response.Redirect("~/Course/Index");
+    }
+    else if (Session["ActiveUser"].ToString() != "registrar")
+    {
+        Response.Redirect("~/Course/Index");
+    }
+}
+
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-title">New Course</div>
+
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm("createCourse", "Course", FormMethod.Post))
+                {
+                    <form id="signupform" class="form-horizontal" role="form">
+
+                      
+
+                        <div class="form-group">
+                            <label for="firstname" class="col-md-3 control-label">Course Name</label>
+                            <div class="col-md-9">
+                                @Html.TextBoxFor(model => model.name, new { @class = "form-control", @type = "text", @placeholder = "Course name", required = "required" })
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <!-- Button -->
+                            <div class="col-md-offset-3 col-md-9">
+                                <button id="btn-signup" type="submit" class="btn btn-info"><i class="icon-hand-right"></i> &nbsp Add Course</button>
+                            </div>
+                            @Html.ValidationSummary()
+                        </div>
+
+                    </form>
+                }
+            </div>
+        </div>

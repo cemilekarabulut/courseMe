@@ -1,0 +1,179 @@
+﻿
+@model course_app.Models.section
+
+@{
+
+    ViewBag.Title = "addSection";
+    if (Session["ActiveUser"] == null)
+    {
+        Response.Redirect("~/Course/Index");
+    }
+    else if (Session["ActiveUser"].ToString() != "registrar")
+    {
+        Response.Redirect("~/Course/Index");
+    }
+}
+<head>
+    <script src="~/Scripts/test.js"></script>
+    <style>
+        p.spacer5 {
+            height: 10px;
+        }
+    </style>
+</head>
+
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-title">New Section</div>
+
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm("addSection", "Course", FormMethod.Post))
+                {
+                <form id="signupform" class="form-horizontal" role="form">
+
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Course Name</label>
+                        <div class="col-md-9">
+                            @*@Html.TextBoxFor(model => model.course_name, new { @id="course",@class = "form-control", @type = "text", @placeholder = "Course name", required = "required", @oninput= "GetInstructers()" })*@
+                            @{
+                                List<SelectListItem> listItems = new List<SelectListItem>();
+                                foreach (var item in Model.course_names)
+                                {
+                                    listItems.Add(new SelectListItem
+                                    {
+                                        Text = item,
+                                        Value = item
+                                    });
+                                }
+
+
+
+                            }
+
+                            @Html.DropDownListFor(model => model.course_name, listItems, "Select", new { @id = "course", @type = "text", required = "required", @oninput = "GetInstructers()" })
+                            <p class="spacer5">  </p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Instructor Name</label>
+                        <div class="col-md-9">
+
+                            
+                            @{
+                                List<SelectListItem> listItems2 = new List<SelectListItem>();
+                                if (Model.instructor_names != null)
+                                {
+                                    foreach (var item in Model.instructor_names)
+                                    {
+                                        listItems.Add(new SelectListItem
+                                        {
+                                            Text = item,
+                                            Value = item
+                                        });
+                                    }
+
+                                }
+
+                            }
+
+                            @Html.DropDownListFor(model => model.instructor_id, listItems2, "Select", new { @id = "ins", required = "required" })
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+
+                        <p class="col-md-9" style="color:gray">You must choose a course to see available tutors. </p>
+     
+                        <label class="col-md-3 control-label">Lecture Day</label>
+                        <div class="col-md-9">
+
+                            @{
+                                List<SelectListItem> listItems3 = new List<SelectListItem>();
+                                listItems3.Add(new SelectListItem()
+                                {
+                                    Text = "Pazartesi",
+                                    Value = "Pazartesi"
+                                });
+                                listItems3.Add(new SelectListItem()
+                                {
+                                    Text = "Salı",
+                                    Value = "Salı"
+                                });
+                                listItems3.Add(new SelectListItem()
+                                {
+                                    Text = "Çarşamba",
+                                    Value = "Çarşamba"
+                                });
+                                listItems3.Add(new SelectListItem()
+                                {
+                                    Text = "Perşembe",
+                                    Value = "Perşembe"
+                                });
+                                listItems3.Add(new SelectListItem()
+                                {
+                                    Text = "Cuma",
+                                    Value = "Cuma"
+                                });
+                            }
+
+                            @Html.DropDownListFor(model => model.day, listItems3, "Select", new { @id = "ins", required = "required" })
+
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+
+                        <p class="col-md-9" style="color:gray"> </p>
+
+                        <label class="col-md-3 control-label">Lecture Hour</label>
+                        <div class="col-md-9">
+
+                            @{
+                                List<SelectListItem> listItems4 = new List<SelectListItem>();
+                                listItems4.Add(new SelectListItem()
+                                {
+                                    Text = "8:40-10:30",
+                                    Value = "8:40-10:30"
+                                });
+                                listItems4.Add(new SelectListItem()
+                                {
+                                    Text = "10:40-12:30",
+                                    Value = "10:40-12:30"
+                                });
+                                listItems4.Add(new SelectListItem()
+                                {
+                                    Text = "13:40-15:30",
+                                    Value = "13:40-15:30"
+                                });
+                                listItems4.Add(new SelectListItem()
+                                {
+                                    Text = "15:40-17:30",
+                                    Value = "15:40-17:30"
+                                });
+                              
+                            }
+
+                            @Html.DropDownListFor(model => model.hour, listItems4, "Select", new { @id = "ins", required = "required" })
+
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <!-- Button -->
+                        <div class="col-md-offset-3 col-md-9">
+                            <p style="height:10px">  </p>
+                            <button id="btn-signup" type="submit" class="btn btn-info"><i class="icon-hand-right"></i> &nbsp Add Section</button>
+                        </div>
+                        @Html.ValidationSummary()
+                    </div>
+
+                </form>
+                }
+            </div>
+        </div>
+   
+

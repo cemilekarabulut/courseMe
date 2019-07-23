@@ -15,5 +15,6 @@ namespace course_app.Models
         public string gender { get; set; }
         public string email { get; set; }
         public byte[] image { get; set; }
+        public int section_id { get; set; }
     }
 }

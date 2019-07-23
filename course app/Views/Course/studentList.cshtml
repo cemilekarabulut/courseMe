@@ -1,0 +1,101 @@
+﻿@model course_app.Models.Ornek
+@{
+    ViewBag.Title = "ViewSection";
+    int a = 0;
+    if (Session["ActiveUser"] == null)
+    {
+        Response.Redirect("~/Course/Index");
+    }
+    else if (Session["ActiveUser"].ToString() != "registrar")
+    {
+        Response.Redirect("~/Course/Index");
+
+    }
+
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+
+
+</head>
+@{ if (Model.registrar.name != null)
+    {
+        <body>
+            <div class="container target">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <hr>
+                        <h1 class="">@Html.ActionLink(Model.registrar.name.ToString() + " " + Model.registrar.surname.ToString(), "registrar", "Course", Model.registrar, new { @style = "text-decoration:none" })</h1>
+                        <h2></h2>
+                        @Html.ActionLink("New Teacher", "signTeacher", "Course", Model.registrar, new { @class = "btn btn-info" })
+                        @Html.ActionLink("New Course", "createCourse", "Course", Model.registrar, new { @class = "btn btn-success" })
+                        @Html.ActionLink("New Section", "addSection", "Course", Model.registrar, new { @class = "btn btn-info" })
+                        @Html.ActionLink("Student List", "studentList", "Course", Model.registrar, new { @class = "btn btn-primary" })
+                        @Html.ActionLink("New Parent", "signParent", "Course", Model.registrar, new { @class = "btn btn-warning" })
+                        @Html.ActionLink("Logout", "Index", "Course", null, new { @class = "btn btn-primary btn-danger" })
+
+                        <br />
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="/users" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="http://www.rlsandbox.com/img/profile.jpg"></a>
+
+                    </div>
+                </div>
+                <br>
+
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Surname</th>
+                            <th scope="col">Mail Address</th>
+                            <th scope="col">Gender</th>
+                            <th scope="col">Age</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.studentList)
+                        {
+
+
+                            <tr>
+                                @{a++;}
+                                <th scope="row">@a</th>
+
+                                <td>@Html.DisplayFor(modelItem => item.id)</td>
+                                <td>@Html.DisplayFor(modelItem => item.name)</td>
+                                <td>@Html.DisplayFor(modelItem => item.surname)</td>
+                                <td>@Html.DisplayFor(modelItem => item.email)</td>
+                                <td>@Html.DisplayFor(modelItem => item.gender)</td>
+                                <td>@Html.DisplayFor(modelItem => item.age)</td>
+                            </tr>
+
+                        }
+
+                    </tbody>
+                </table>
+
+            </div>
+            <hr />
+        </body>
+    }
+    else
+    {
+        <h3> Do you want to go to the mainpage?(If not you can go back to your page.)</h3>
+        @Html.ActionLink("Main Page", "Index", "Course", null, new { @class = "btn btn-primary btn-danger" })
+    }
+}
+</html>

@@ -7,14 +7,17 @@ namespace course_app.Models
 {
     public class course_records
     {
+
         public int id { get; set; }
         public int sectionId { get; set; }
         public int studentId { get; set; }
-        public float grade { get; set; }
+        public double grade { get; set; }
     }
     public class Ornek
     {
+        public List<string> list { get; set; }
         public student student { get; set; }
+         public List<student> studentList { get; set; }
         public course_records course_records { get; set; }
         public course course { get; set; }
         public instructor instructor { get; set; }

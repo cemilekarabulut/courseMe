@@ -20,8 +20,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  
 
 </head>
 @{
@@ -71,6 +70,7 @@
                             <div class="panel-heading">Courses</div>
                             @foreach (var item in Model.student_Main_Pages)
                             {
+
                                 <div class="panel-body">
                                     <h4>@Html.DisplayFor(modelItem => item.course_name)-Section:@Html.DisplayFor(modelItem => item.section_id)</h4>
                                     <ul>
@@ -97,7 +97,8 @@
     }
     else
     {
-        <h2> Where do yo think you're going?</h2>
+        <h3> Do you want to go to the mainpage?(If not you can go back to your page.)</h3>
+        @Html.ActionLink("Main Page", "Index", "Course", null, new { @class = "btn btn-primary btn-danger" })
     }
 }
 </html>

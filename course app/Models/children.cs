@@ -5,12 +5,10 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 namespace course_app.Models
 {
-    public class login
+    public class children
     {
-        public int id { get; set; }
+        public int parent_id { get; set; }
         [Required]
-        public string email { get; set; }
-        [Required]
-        public string password { get; set; }
+        public int student_id { get; set; }
     }
 }

@@ -21,8 +21,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+   
 
 
 
@@ -38,7 +38,9 @@
                 <div class="row">
                     <div class="col-sm-10">
                         <h1 class="">Parent Information System</h1>
+                        @Html.ActionLink("New Child", "addChild", "Course", Model.parent, new { @class = "btn btn-info" })
                         @Html.ActionLink("Logout", "Index", "Course", null, new { @class = "btn btn-primary btn-danger" })
+
                         <br>
 
                     </div>
@@ -70,67 +72,95 @@
                             @foreach (var item in Model.students)
                             {
                                 <div class="panel-body">
-                                    <h4 align="center" style="font-weight: bold;">@Html.DisplayFor(modelItem => item.student_name)</h4>
+                                    <h4 align="center" style="font-weight: bold;">@Html.DisplayFor(modelItem => item.student_name) @Html.DisplayFor(modelItem => item.student_surname)</h4>
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
                                                 <th scope="col">Course</th>
                                                 <th scope="col">Section</th>
                                                 <th scope="col">Date</th>
-                                                <th scope="col">Grade</th>
+                                                <th scope="col">Midterm</th>
                                                 <th scope="col">Letter Grade</th>
 
                                             </tr>
                                         </thead>
                                         @foreach (var item1 in item.student_s)
                                         {
-                                        <tbody>
-                                            <tr>
+                                            <tbody>
+                                                <tr>
+                                                    @*@{
+            if (item1.midterm > 89)
+            {
+                x = "AA";
+            }
+            else if (item1.midterm > 84)
+            {
+                x = "BA";
+            }
+            else if (item1.midterm > 79)
+            {
+                x = "BB";
+            }
+            else if (item1.midterm > 74)
+            {
+                x = "CB";
+            }
+            else if (item1.midterm > 69)
+            {
+                x = "CC";
+            }
+            else if (item1.midterm > 64)
+            {
+                x = "DC";
+            }
+            else if (item1.midterm > 59)
+            {
+                x = "DD";
+            }
+            else if (item1.midterm > 49)
+            {
+                x = "FD";
+            }
+            else
+            {
+                x = "FF";
+            }
+        }*@
+                                                    @{ if (item.section_id == 0)
+                                                        {
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>}
+                                                        else
+                                                        {
 
-                                                <td>@Html.DisplayFor(modelItem => item1.course_name)</td>
-                                                <td>Section @Html.DisplayFor(modelItem => item1.section_id)</td>
-                                                <td>@Html.DisplayFor(modelItem => item1.section_date)</td>
-                                                <td>@Html.DisplayFor(modelItem => item1.grade)</td>
-                                                
-                                                    @{
-                                                        if (item1.grade > 89)
-                                                        {
-                                                            x = "AA";
+                                                            <td>@Html.DisplayFor(modelItem => item1.course_name)</td>
+                                                            <td>Section @Html.DisplayFor(modelItem => item1.section_id)</td>
+                                                            <td>@Html.DisplayFor(modelItem => item1.section_date)</td>
                                                         }
-                                                        else if (item1.grade > 84)
+                                                    }
+
+                                                    @{ if (item.midterm < 0)
                                                         {
-                                                            x = "BA";
-                                                        }
-                                                        else if (item1.grade > 79)
-                                                        {
-                                                            x = "BB";
-                                                        }
-                                                        else if (item1.grade > 74)
-                                                        {
-                                                            x = "CB";
-                                                        }
-                                                        else if (item1.grade > 69)
-                                                        {
-                                                            x = "CC";
-                                                        }
-                                                        else if (item1.grade > 64)
-                                                        {
-                                                            x = "DC";
-                                                        }
-                                                        else if (item1.grade > 59)
-                                                        {
-                                                            x = "DD";
-                                                        }
-                                                        else if (item1.grade > 49)
-                                                        {
-                                                            x = "FD";
+                                                            <td></td>
+
                                                         }
                                                         else
                                                         {
-                                                            x = "FF";
+                                                            <td>@Html.DisplayFor(modelItem => item.midterm)</td>
+                                                        }
+                                                        if (item.final < 0)
+                                                        {
+                                                            <td></td>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>@Html.DisplayFor(modelItem => item.final)</td>
                                                         }
                                                     }
-                                                    <td>@x</td>
+
+
 
                                                 </tr>
 
@@ -149,7 +179,8 @@
     }
     else
     {
-        <h2> Where do yo think you're going?</h2>
+        <h3> Do you want to go to the mainpage?(If not you can go back to your page.)</h3>
+        @Html.ActionLink("Main Page", "Index", "Course", null, new { @class = "btn btn-primary btn-danger" })
     }
 }
 </html>

@@ -11,6 +11,7 @@ namespace course_app.Models
         public string section_date { get; set; }
         public string instructor_name { get; set; }
         public int section_id { get; set; }
-        public double grade { get; set; }
+        public double midterm { get; set; }
+        public double final { get; set; }
     }
 }

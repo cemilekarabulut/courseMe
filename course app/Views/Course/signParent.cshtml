@@ -1,0 +1,108 @@
+﻿
+@model course_app.Models.parent
+
+@{
+
+    ViewBag.Title = "signParent";
+    if (Session["ActiveUser"] == null)
+    {
+        Response.Redirect("~/Course/Index");
+    }
+    else if (Session["ActiveUser"].ToString() != "registrar")
+    {
+        Response.Redirect("~/Course/Index");
+    }
+}
+
+
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-title">New Parent</div>
+                <div style="float:right; font-size: 85%; position: relative; top:-10px"> @Html.ActionLink("Sign In", "Index", "Course", null)</div>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm("signParent", "Course", FormMethod.Post))
+                {
+                    <form id="signupform" class="form-horizontal" role="form">
+
+                        <div id="signupalert" style="display:none" class="alert alert-danger">
+                            <p>Error:</p>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="col-md-3 control-label">Email</label>
+                            <div class="col-md-9">
+                                @Html.TextBoxFor(model => model.email, new { @class = "form-control", @type = "email", @placeholder = "Email Address", required = "required" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="firstname" class="col-md-3 control-label">First Name</label>
+                            <div class="col-md-9">
+                                @Html.TextBoxFor(model => model.name, new { @class = "form-control", @type = "text", @placeholder = "First Name", required = "required" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname" class="col-md-3 control-label">Last Name</label>
+                            <div class="col-md-9">
+                                @Html.TextBoxFor(model => model.surname, new { @class = "form-control", @type = "text", @placeholder = "Last Name", required = "required" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname" class="col-md-3 control-label">Student ID</label>
+                            <div class="col-md-9">
+                                @Html.TextBoxFor(model => model.student_id, new { @class = "form-control", @type = "number", @placeholder = "ID" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="col-md-3 control-label">Password</label>
+                            <div class="col-md-9">
+                                @Html.TextBoxFor(model => model.password, new { @class = "form-control", @type = "password", @placeholder = "Passsword", required = "required" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="age" class="col-md-3 control-label">Age</label>
+                            <div class="col-md-9">
+                                @Html.TextBoxFor(model => model.age, new { @class = "form-control", @type = "number", @placeholder = "Age", required = "required" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="icode" class="col-md-3 control-label">Gender</label>
+                            <div class="col-md-9">
+                                @{
+                                    List<SelectListItem> listItems = new List<SelectListItem>();
+                                    listItems.Add(new SelectListItem
+                                    {
+                                        Text = "Male",
+                                        Value = "Male"
+                                    });
+                                    listItems.Add(new SelectListItem
+                                    {
+                                        Text = "Female",
+                                        Value = "Female",
+
+                                    });
+
+                                }
+
+                                @Html.DropDownListFor(model => model.gender, listItems, "Select", new { @type = "text", required = "required" })
+
+
+                            </div>
+                        </div>
+                        <script src="~/Scripts/test.js"></script>
+                        <div class="form-group">
+                            <!-- Button -->
+                            <div class="col-md-offset-3 col-md-9">
+                                <button id="btn-signup" type="submit" class="btn btn-info" ><i class="icon-hand-right"></i> &nbsp Add Parent</button>
+                            </div>
+                            @Html.ValidationSummary()
+                        </div>
+
+                    </form>
+                }
+            </div>
+        </div>
+
+

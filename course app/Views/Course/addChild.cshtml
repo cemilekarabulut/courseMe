@@ -1,0 +1,53 @@
+﻿
+@model course_app.Models.children
+
+@{
+
+    ViewBag.Title = "addChild";
+    if (Session["ActiveUser"] == null)
+    {
+        Response.Redirect("~/Course/Index");
+    }
+    else if (Session["ActiveUser"].ToString() != "parent")
+    {
+        Response.Redirect("~/Course/Index");
+    }
+}
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <div class="panel-title">New Child</div>
+
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm("addchild", "Course", FormMethod.Post))
+        {
+            <form id="signupform" class="form-horizontal" role="form">
+
+                <div id="signupalert" style="display:none" class="alert alert-danger">
+                    <p>Error:</p>
+                    <span></span>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="firstname" class="col-md-3 control-label">Please enter the Id of your child</label>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model=>model.student_id, new { @class = "form-control", @type = "number", @placeholder = "ID", required = "required" })
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <!-- Button -->
+                    <div class="col-md-offset-3 col-md-9">
+                        <button id="btn-signup" type="submit" class="btn btn-info"><i class="icon-hand-right"></i> &nbsp Add Child</button>
+                    </div>
+                    @Html.ValidationSummary()
+                </div>
+
+            </form>
+        }
+    </div>
+</div>
