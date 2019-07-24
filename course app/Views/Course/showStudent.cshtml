@@ -1,238 +1,318 @@
-﻿@model course_app.Models.Ornek
-@{
+﻿@{
     ViewBag.Title = "showStudent";
-    int a = 0;
-    if (Session["ActiveUser"] == null)
-    {
-        Response.Redirect("~/Course/Index");
-    }
-    else if (Session["ActiveUser"].ToString() != "instructor")
-    {
-        Response.Redirect("~/Course/Index");
-        Model.instructor.section_id = Model.section_id;
 
-    }
-    List<string> list = new List<string>();
-    string graded = "";
-    int temp = 0;
-    string str2 = "a";
-    string str = "";
-    double b = 0;
-    double sum = 0;
 }
-
-
-<!DOCTYPE html>
-<html lang="en">
 <head>
-
     <script src="~/Scripts/test.js"></script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      
+        $(document).ready(function () {
+            toTable();
+        });
 
-
-    
-
-
-
+        $(function () {
+            $("1").keydown(function () {
+                // Save old value.
+                if (!$(this).val() || (parseInt($(this).val()) <= 11 && parseInt($(this).val()) >= 0))
+                    $(this).data("old", $(this).val());
+            });
+            $("1").keyup(function () {
+                // Check correct, else revert back to old value.
+                if (!$(this).val() || (parseInt($(this).val()) <= 11 && parseInt($(this).val()) >= 0))
+                    ;
+                else
+                    $(this).val($(this).data("old"));
+            });
+        });</script>
 </head>
-@{ if (Model.instructor.name != null)
-    {
-        <body>
-            <div class="container target">
-                <div class="row">
-                    <div class="col-sm-10">
+<body>
+    <div class="row">
+        <div class="col-sm-10">
 
-                        <h1 class="">@Html.ActionLink(Model.instructor.name.ToString() + " " + Model.instructor.surname.ToString(), "instructor", "Course", Model.instructor, new { @style = "text-decoration:none" })</h1>
+            <h1 class="">@Html.ActionLink("a", "forJava", "Course", new { @style = "text-decoration:none", @id = "name" })</h1>
 
 
-                        <hr>
-                        <h2>@Html.DisplayFor(model => model.course_name)</h2>
-                        <h3>Section @Html.DisplayFor(model => model.section_id)</h3>
-                        <p style="display:none" id="section"> @Html.DisplayFor(model => model.section_id)</p>
+            <hr>
+            <h2 id="course">Course</h2>
+            <h3 id="section">Section </h3>
 
+
+            <br>
+        </div>
+        <div class="col-sm-2">
+            <a href="/users" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="http://www.rlsandbox.com/img/profile.jpg"></a>
+
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-sm-2">
+
+
+            <button type="submit" class="btn btn-warning" onclick="return pass_fail()">Observe Passed/Failed</button>
+
+
+        </div>
+
+    </div>
+    <table class="table" id="Table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Surname</th>
+                <th scope="col">Midterm</th>
+                <th scope="col" id="midterm">Enter Grade</th>
+                <th scope="col">Final</th>
+                <th scope="col" id="final">Enter Grade</th>
+                <th scope="col"></th>
+
+            </tr>
+        </thead>
+    </table>
+    <div class="col-sm-2 pull-right">
+        <button type="submit" class="btn btn-success" onclick="updateGrade()">Confirm</button>
+    </div>
+    <br />
+</body>
+    @*@model course_app.Models.Ornek
+        @{
+            ViewBag.Title = "showStudent";
+            int a = 0;
+            if (Session["ActiveUser"] == null)
+            {
+                Response.Redirect("~/Course/Index");
+            }
+            else if (Session["ActiveUser"].ToString() != "instructor")
+            {
+                Response.Redirect("~/Course/Index");
+                Model.instructor.section_id = Model.section_id;
+
+            }
+            List<string> list = new List<string>();
+            string graded = "";
+            int temp = 0;
+            string str2 = "a";
+            string str = "";
+            double b = 0;
+            double sum = 0;
+        }
+
+
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+
+            <script src="~/Scripts/test.js"></script>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta http-equiv="X-UA-Compatible" content="ie=edge">
+            <title>Document</title>
+            <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+
+
+
+
+
+        </head>
+        @{ if (Model.instructor.name != null)
+            {
+                <body>
+                    <div class="container target">
+                        <div class="row">
+                            <div class="col-sm-10">
+
+                                <h1 class="">@Html.ActionLink(Model.instructor.name.ToString() + " " + Model.instructor.surname.ToString(), "instructor", "Course", Model.instructor, new { @style = "text-decoration:none" })</h1>
+
+
+                                <hr>
+                                <h2>@Html.DisplayFor(model => model.course_name)</h2>
+                                <h3>Section @Html.DisplayFor(model => model.section_id)</h3>
+                                <p style="display:none" id="section"> @Html.DisplayFor(model => model.section_id)</p>
+
+                                <br>
+                            </div>
+                            <div class="col-sm-2">
+                                <a href="/users" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="http://www.rlsandbox.com/img/profile.jpg"></a>
+
+                            </div>
+                        </div>
                         <br>
-                    </div>
-                    <div class="col-sm-2">
-                        <a href="/users" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="http://www.rlsandbox.com/img/profile.jpg"></a>
-
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-sm-2">
+                        <div class="row">
+                            <div class="col-sm-2">
 
 
-                        <button type="submit" class="btn btn-warning" onclick="return pass_fail()">Observe Passed/Failed</button>
+                                <button type="submit" class="btn btn-warning" onclick="return pass_fail()">Observe Passed/Failed</button>
 
 
-                    </div>
-                 
-                </div>
-                <p style="height:20px"></p>
+                            </div>
 
-                <table class="table" id="Table">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">ID</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Surname</th>
-                            <th scope="col">Midterm</th>
-                            <th scope="col">Enter Grade</th>
-                            <th scope="col">Final</th>
-                            <th scope="col">Enter Grade</th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.students)
-                        {
+                        </div>
+                        <p style="height:20px"></p>
 
-                            Model.instructor.student_id = item.student_id;
-                            Model.instructor.section_id = Model.section_id;
-
-                            <tr>
-                                <th scope="row">@a</th>
-                                @{a++;}
-                                <td>@Html.DisplayFor(modelItem => item.student_id)</td>
-                                <td>@Html.DisplayFor(modelItem => item.student_name)</td>
-                                <td>@Html.DisplayFor(modelItem => item.student_surname)</td>
-                                @{ if (item.midterm == -2)
-                                    {
-                                        <td></td>}
-                                    else
-                                    {
-                                        <td>@Html.DisplayFor(modelItem => item.midterm)</td>}
-                                }
-                                @using (Html.BeginForm("update_midterm", "Course", Model.instructor, FormMethod.Post, Model.instructor))
+                        <table class="table" id="Table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Surname</th>
+                                    <th scope="col">Midterm</th>
+                                    <th scope="col">Enter Grade</th>
+                                    <th scope="col">Final</th>
+                                    <th scope="col">Enter Grade</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.students)
                                 {
-                                    <td>
-                                        <div class="col-sm-4">
-                                            @Html.TextBoxFor(model => model.instructor.midterm, new { @class = "form-control", @type = "number", @min = "0" })
 
-                                        </div>
+                                    Model.instructor.student_id = item.student_id;
+                                    Model.instructor.section_id = Model.section_id;
 
-                                        <button type="submit" class="btn btn-success">Confirm</button>
-
-                                    </td>
-                                }
-
-                                @{ if (item.final == -2)
-                                    {
-                                        <td></td>}
-                                    else
-                                    {
-                                        <td>@Html.DisplayFor(modelItem => item.final)</td>}
-                                }
-                                @using (Html.BeginForm("update_final", "Course", Model.instructor, FormMethod.Post, Model.instructor))
-                                {
-                                    <td>
-                                        <div class="col-sm-4">
-                                            @Html.TextBoxFor(model => model.instructor.final, new { @class = "form-control", @type = "number", @min = "0" })
-
-                                        </div>
-
-                                        <button type="submit" class="btn btn-success">Confirm</button>
-
-                                    </td>}
-
-                                @{ if (item.final != -2 && item.midterm != -2)
-                                    {
-                                        b = Convert.ToDouble(item.midterm * 4 / 10 + item.final * 6 / 10);
-                                        sum += b;
-
-
-                                        if (b > 89)
-                                        {
-                                            graded = "AA";
-                                            str = "Passed";
+                                    <tr>
+                                        <th scope="row">@a</th>
+                                        @{a++;}
+                                        <td>@Html.DisplayFor(modelItem => item.student_id)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.student_name)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.student_surname)</td>
+                                        @{ if (item.midterm == -2)
+                                            {
+                                                <td></td>}
+                                            else
+                                            {
+                                                <td>@Html.DisplayFor(modelItem => item.midterm)</td>}
                                         }
-                                        else if (b > 84)
+                                        @using (Html.BeginForm("update_midterm", "Course", Model.instructor, FormMethod.Post, Model.instructor))
                                         {
-                                            graded = "BA";
-                                            str = "Passed";
-                                        }
-                                        else if (b > 79)
-                                        {
-                                            graded= "BB";
-                                            str = "Passed";
-                                        }
-                                        else if (b > 74)
-                                        {
-                                            graded= "CB";
-                                            str = "Passed";
-                                        }
-                                        else if (b > 69)
-                                        {
-                                            graded= "CC";
-                                            str = "Passed";
-                                        }
-                                        else if (b > 64)
-                                        {
-                                            graded = "DC";
-                                            str = "Passed";
-                                        }
-                                        else if (b> 59)
-                                        {
-                                            graded = "DD";
-                                            str = "Passed";
-                                        }
-                                        else if (b > 49)
-                                        {
-                                            graded= "FD";
-                                            str = "Failed";
-                                        }
-                                        else
-                                        {
-                                            graded = "FF";
-                                            str = "Failed";
-                                        }
-                                        <td id=@str2 style="display:none;color:red;font-size:medium">Letter Grade:@graded => @str </td>
-                                        str2 += "a";
-                                       
-                                        list.Add(str);
+                                            <td>
+                                                <div class="col-sm-4">
+                                                    @Html.TextBoxFor(model => model.instructor.midterm, new { @class = "form-control", @type = "number", @min = "0" })
 
-                                    }
-                                    else
-                                    {
+                                                </div>
+
+                                                <button type="submit" class="btn btn-success">Confirm</button>
+
+                                            </td>
+                                        }
+
+                                        @{ if (item.final == -2)
+                                            {
+                                                <td></td>}
+                                            else
+                                            {
+                                                <td>@Html.DisplayFor(modelItem => item.final)</td>}
+                                        }
+                                        @using (Html.BeginForm("update_final", "Course", Model.instructor, FormMethod.Post, Model.instructor))
+                                        {
+                                            <td>
+                                                <div class="col-sm-4">
+                                                    @Html.TextBoxFor(model => model.instructor.final, new { @class = "form-control", @type = "number", @min = "0" })
+
+                                                </div>
+
+                                                <button type="submit" class="btn btn-success">Confirm</button>
+
+                                            </td>}
+
+                                        @{ if (item.final != -2 && item.midterm != -2)
+                                            {
+                                                b = Convert.ToDouble(item.midterm * 4 / 10 + item.final * 6 / 10);
+                                                sum += b;
+
+
+                                                if (b > 89)
+                                                {
+                                                    graded = "AA";
+                                                    str = "Passed";
+                                                }
+                                                else if (b > 84)
+                                                {
+                                                    graded = "BA";
+                                                    str = "Passed";
+                                                }
+                                                else if (b > 79)
+                                                {
+                                                    graded= "BB";
+                                                    str = "Passed";
+                                                }
+                                                else if (b > 74)
+                                                {
+                                                    graded= "CB";
+                                                    str = "Passed";
+                                                }
+                                                else if (b > 69)
+                                                {
+                                                    graded= "CC";
+                                                    str = "Passed";
+                                                }
+                                                else if (b > 64)
+                                                {
+                                                    graded = "DC";
+                                                    str = "Passed";
+                                                }
+                                                else if (b> 59)
+                                                {
+                                                    graded = "DD";
+                                                    str = "Passed";
+                                                }
+                                                else if (b > 49)
+                                                {
+                                                    graded= "FD";
+                                                    str = "Failed";
+                                                }
+                                                else
+                                                {
+                                                    graded = "FF";
+                                                    str = "Failed";
+                                                }
+                                                <td id=@str2 style="display:none;color:red;font-size:medium">Letter Grade:@graded => @str </td>
+                                                str2 += "a";
+
+                                                list.Add(str);
+
+                                            }
+                                            else
+                                            {
+                                                <td></td>
+                                            }
+
+                                        }
+                                        @{ temp++;}
+                                    </tr>
+
+                                            }
+
+                                    <tr>
                                         <td></td>
-                                    }
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        @{double x = (sum/temp);
+                                            Model.list = list;}
+                                        <td id="average" style="display:none;font-size:medium">Class Average:@String.Format("{0:0.00}", x)</td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                        <p id="temp" style="display:none">@temp</p>
 
-                                }
-                                @{ temp++;}
-                            </tr>
-
-                                    }
-
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                @{double x = (sum/temp);
-                                    Model.list = list;}
-                                <td id="average" style="display:none;font-size:medium">Class Average:@String.Format("{0:0.00}", x)</td>
-                            </tr>
-                    </tbody>
-                </table>
-                <p id="temp" style="display:none">@temp</p>
-           
-            </div>
-            <hr />
-        </body>
-    }
-    else
-    {
-        <h3> Do you want to go to the mainpage?(If not you can go back to your page.)</h3>
-        @Html.ActionLink("Main Page", "Index", "Course", null, new { @class = "btn btn-primary btn-danger" })
-    }
-}
-</html>
+                    </div>
+                    <hr />
+                </body>
+            }
+            else
+            {
+                <h3> Do you want to go to the mainpage?(If not you can go back to your page.)</h3>
+                @Html.ActionLink("Main Page", "Index", "Course", null, new { @class = "btn btn-primary btn-danger" })
+            }
+        }
+        </html>*@
