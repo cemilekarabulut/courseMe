@@ -55,7 +55,12 @@
 
 
         </div>
-
+        <div class="col-sm-2">
+            <button type="submit" class="btn btn-danger" onclick="apply()">Apply Passed/Failed</button>
+        </div>
+        <div class="col-sm-2">
+            <button type="submit" class="btn btn-success" onclick="updateGrade()">Confirm Grades</button>
+        </div>
     </div>
     <table class="table" id="Table">
         <thead class="thead-dark">
@@ -73,9 +78,7 @@
             </tr>
         </thead>
     </table>
-    <div class="col-sm-2 pull-right">
-        <button type="submit" class="btn btn-success" onclick="updateGrade()">Confirm</button>
-    </div>
+   
     <br />
 </body>
     @*@model course_app.Models.Ornek

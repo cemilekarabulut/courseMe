@@ -49,11 +49,11 @@ function toTable() {
                     $('<td>').text(item.student_id),
                     $('<td>').text(item.student_name),
                     $('<td>').text(item.student_surname),
-                   
-                    $('<td>').text(x),
-                    $('<td>').append("<input type='number' min='0' max='100' id='"+i.toString()+"' onchange='getGrade(this)'>"),
-                    $('<td>').text(y),
-                    $('<td>').append("<input type='number' min='0' max='100' id='*" + i.toString() + "' onchange='getFinal(this)'>"),
+
+                    $('<td>').append('<p id="/' + i.toString() + '">' + x.toString() + '</p>'),
+                    $('<td>').append("<input type='number' min='0' max='100' id='" + i.toString() + "' onchange='getGrade(this)'>"),
+                    $('<td>').append('<p id="*' + i.toString() + '">' + y.toString() + '</p>'),
+                    $('<td>').append("<input type='number' min='0' max='100' id='-" + i.toString() + "' onchange='getFinal(this)'>"),
                     $('<td>').append('<p id="+' + i.toString() + '" style="color:red;font-size:medium"></p>')).appendTo('#Table');
           
              
@@ -102,13 +102,13 @@ function getFinal(ctl) {
     var i = $(cols[0]).text();
    
 
-    if (document.getElementById("*" + i).value != "") {
+    if (document.getElementById("-" + i).value != "") {
         if (final.find(fruit => fruit.id == id) == null) {
-            final.push({ id: id, grade: document.getElementById("*" + i).value });;
+            final.push({ id: id, grade: document.getElementById("-" + i).value });;
         }
         else {
             final.splice(final.indexOf(final.find(fruit => fruit.id == id)), 1);
-            final.push({ id: id, grade: document.getElementById("*" + i).value });
+            final.push({ id: id, grade: document.getElementById("-" + i).value });
 
         }
         
@@ -119,7 +119,8 @@ function getFinal(ctl) {
 
 }
 function updateGrade() {
-    var section = parseInt(document.getElementById("section").innerHTML[document.getElementById("section").innerHTML.length-1]);
+    var section = parseInt(document.getElementById("section").innerHTML[document.getElementById("section").innerHTML.length - 1]);
+    if (midterm != null || final != null) {
     $.ajax({
 
         url: '/Course/updateGrade/' + section,
@@ -130,24 +131,32 @@ function updateGrade() {
         }
 
     });
-
+}
 }
 function pass_fail() {
+ 
+    var rowctr = $("#Table td").closest("tr").length;
+    for (i = 0;i<rowctr ; i++) {
+        if (document.getElementById("/" + i.toString()).innerHTML != "" && document.getElementById("*" + i.toString()).innerHTML != "") {
+            if (document.getElementById("/" + i.toString()).innerHTML * 4 / 10 + document.getElementById("*" + i.toString()).innerHTML * 6 / 10 > 50) {
+                document.getElementById("+" + i.toString()).innerHTML = "Passed";
+            }
+            else {
+                document.getElementById("+" + i.toString()).innerHTML ="Failed";
+            }
+        }
+        else
+            document.getElementById("+" + i.toString()).innerHTML = "Failed";
+    }
+    
+}
+function apply(){
     var section = parseInt(document.getElementById("section").innerHTML[document.getElementById("section").innerHTML.length - 1]);
     $.ajax({
 
         url: '/Course/pass_fail/' + section,
-        data: { section: section },
-        type: "POST",
-        dataType:'json',
-        success: function (data) {
-            $.each(data, function (i, item) {
-
-                document.getElementById("+" + i.toString()).innerHTML = item;
-               
-
-            });
-        }
+        data: { section: section }
+      
 
     });
 }

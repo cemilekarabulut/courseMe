@@ -912,31 +912,54 @@ namespace course_app.Controllers
 
             return View();
         }
-        public ActionResult pass_fail(int section)
+        public void pass_fail(int section)
         {
-            List<string> situation = new List<string>();
+            Dictionary<int,int> pass = new Dictionary<int, int>();
             conn.Open();
-            MySqlCommand cmd = new MySqlCommand($"select midterm,final from course_records where sectionId={section}", conn);
+            MySqlCommand cmd = new MySqlCommand($"select midterm,final,studentId from course_records where sectionId={section}", conn);
             MySqlDataReader reader;
             reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                if(reader["midterm"]!=DBNull.Value && reader["final"] != DBNull.Value) { 
-                 if ((Convert.ToDouble(reader["midterm"]) * 4 / 10 + Convert.ToDouble(reader["final"]) * 6 / 10) < 50)
-                 {
-                    situation.Add("Failed");
-                 }
+                if (reader["midterm"] != DBNull.Value && reader["final"] != DBNull.Value) {
+                    if ((Convert.ToDouble(reader["midterm"]) * 4 / 10 + Convert.ToDouble(reader["final"]) * 6 / 10) < 50)
+                    {
+                        pass.Add(Convert.ToInt32(reader["studentId"]),0);
+                    }
 
                     else
-                    situation.Add("Passed");
-                 }
-                else
-                {
-                    situation.Add("Failed");
+                        pass.Add(Convert.ToInt32(reader["studentId"]),1);
                 }
+              
+              
             }
             conn.Close();
-            return Json(situation,JsonRequestBehavior.AllowGet);
+            apply(pass, section);
+            //conn.Open();
+            //foreach(int x in pass) {
+            //    MySqlCommand command;
+            //    if (x != 3)
+            //    {
+            //        command= new MySqlCommand($"update course_records set isPassed = {x} where sectionId={section}", conn);
+            //        MySqlDataReader dataReader;
+            //        dataReader = command.ExecuteReader();
+            //    }
+                  
+               
+                   
+            //}
+            //conn.Close();
+        }
+      public void apply(Dictionary<int,int> pass,int section)
+        {
+            foreach (KeyValuePair<int,int> entry in pass)
+            {
+                conn.Open();
+                MySqlCommand command = new MySqlCommand($"update course_records set isPassed = {entry.Value} where sectionId={section} and studentId={entry.Key}", conn);
+                MySqlDataReader dataReader;
+                dataReader = command.ExecuteReader();
+                conn.Close();
+            }
         }
         [HttpPost]
 
