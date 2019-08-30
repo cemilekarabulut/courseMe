@@ -25,8 +25,9 @@ DROP TABLE IF EXISTS `course`;
 CREATE TABLE `course` (
   `id` int(2) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) DEFAULT NULL,
+  `field` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -35,7 +36,7 @@ CREATE TABLE `course` (
 
 LOCK TABLES `course` WRITE;
 /*!40000 ALTER TABLE `course` DISABLE KEYS */;
-INSERT INTO `course` VALUES (1,'phys105'),(2,'math100'),(3,'ceng232');
+INSERT INTO `course` VALUES (1,'phys105','Physics'),(2,'math100','Math'),(3,'ceng232','Computer Science'),(4,'ceng140','Computer Science'),(5,'ee280','Electric Engineering'),(6,'che100','Chemistry');
 /*!40000 ALTER TABLE `course` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -48,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-17  8:55:44
+-- Dump completed on 2019-08-30 15:46:24

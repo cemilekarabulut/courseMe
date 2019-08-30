@@ -20,8 +20,10 @@ namespace course_app.Models
         public string password { get; set; }
         [Required]
         public int age { get; set; }
-        public byte[] image { get; set; }
 
+        public byte[] image { get; set; }
+        
         public int student_id { get; set; }
     }
+    
 }

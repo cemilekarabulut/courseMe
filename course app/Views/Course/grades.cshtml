@@ -23,6 +23,28 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+   
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var id = @Html.Raw(Json.Encode(Model.student.id));
+            $.ajax({
+
+                url: '/Course/displayImage/' + id,
+                data: { section: id },
+                async: true,
+
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    $("#image").attr("src", "data:image/jpg;base64," + data);
+                }
+
+            });
+        });
+    </script>
 
 
 
@@ -46,7 +68,7 @@
                         <br>
                     </div>
                     <div class="col-sm-2">
-                        <a href="/users" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="http://www.rlsandbox.com/img/profile.jpg"></a>
+                        <a href="/users" class="pull-right"><img id="image" title="profile image" class="img-circle img-responsive" style="width:300px;max-height:200px" src=""></a>
 
                     </div>
                 </div>
@@ -56,97 +78,98 @@
                         <!--left col-->
                         <ul class="list-group">
                             <li class="list-group-item text-muted" contenteditable="false">Profile</li>
-                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">ID  </strong></span> 852636541</li>
-                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Name</strong></span> Cemile</li>
-                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Surname</strong></span> Karabulut</li>
-                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Age</strong></span> 18</li>
-                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Mail </strong></span> cemile@gmail.com </li>
-                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Gender </strong></span> Female</li>
+                         
+                            <li class="list-group-item text-right" id="id"><span class="pull-left"><strong class="">ID  </strong></span> @Html.DisplayFor(model => model.student.id)</li>
+                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Name</strong></span> @Html.DisplayFor(model => model.student.name)</li>
+                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Surname</strong></span> @Html.DisplayFor(model => model.student.surname)</li>
+                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Age</strong></span> @Html.DisplayFor(model => model.student.age)</li>
+                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Mail </strong></span> @Html.DisplayFor(model => model.student.email) </li>
+                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Gender </strong></span> @Html.DisplayFor(model => model.student.gender)</li>
                         </ul>
 
 
                     </div>
-                    <!--/col-3-->
-                    <div class="col-sm-9" style="" contenteditable="false">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Midterm</th>
-                                    <th scope="col">Final</th>
-                                  
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.student_Main_Pages)
-                                {
-                                <tr>
-                                    @*@{
-                                        if (item.midterm > 89)
-                                        {
-                                            x = "AA";
-                                        }
-                                        else if (item.midterm > 84)
-                                        {
-                                            x = "BA";
-                                        }
-                                        else if (item.midterm > 79)
-                                        {
-                                            x = "BB";
-                                        }
-                                        else if (item.midterm > 74)
-                                        {
-                                            x = "CB";
-                                        }
-                                        else if (item.midterm > 69)
-                                        {
-                                            x = "CC";
-                                        }
-                                        else if (item.midterm > 64)
-                                        {
-                                            x = "DC";
-                                        }
-                                        else if (item.midterm > 59)
-                                        {
-                                            x = "DD";
-                                        }
-                                        else if (item.midterm > 49)
-                                        {
-                                            x = "FD";
-                                        }
-                                        else
-                                        {
-                                            x = "FF";
-                                        }
-                                    }*@
-                                    <td>@Html.DisplayFor(modelItem => item.course_name)</td>
-                                    @{ if (item.midterm >= 0)
-                                        {
+<!--/col-3-->
+<div class="col-sm-9" style="" contenteditable="false">
+<table class="table table-striped">
+<thead>
+<tr>
+<th scope="col">Course Name</th>
+<th scope="col">Midterm</th>
+<th scope="col">Final</th>
 
-                                            <td>@Html.DisplayFor(modelItem => item.midterm)</td>
-                                        }
-                                        else
-                                        {
-                                            <td></td>
+</tr>
+</thead>
+<tbody>
+@foreach (var item in Model.student_Main_Pages)
+{
+<tr>
+                            @*@{
+        if (item.midterm > 89)
+        {
+            x = "AA";
+        }
+        else if (item.midterm > 84)
+        {
+            x = "BA";
+        }
+        else if (item.midterm > 79)
+        {
+            x = "BB";
+        }
+        else if (item.midterm > 74)
+        {
+            x = "CB";
+        }
+        else if (item.midterm > 69)
+        {
+            x = "CC";
+        }
+        else if (item.midterm > 64)
+        {
+            x = "DC";
+        }
+        else if (item.midterm > 59)
+        {
+            x = "DD";
+        }
+        else if (item.midterm > 49)
+        {
+            x = "FD";
+        }
+        else
+        {
+            x = "FF";
+        }
+    }*@
+                                <td>@Html.DisplayFor(modelItem => item.course_name)</td>
+                                @{ if (item.midterm >= 0)
+                                    {
 
-                                        }
-                                        if (item.final >= 0)
-                                        {
-
-                                            <td>@Html.DisplayFor(modelItem => item.final)</td>
-                                        }
-                                        else
-                                        {
-                                            <td></td>
-
-                                        }
+                                        <td>@Html.DisplayFor(modelItem => item.midterm)</td>
                                     }
+                                    else
+                                    {
+                                        <td></td>
+
+                                    }
+                                    if (item.final >= 0)
+                                    {
+
+                                        <td>@Html.DisplayFor(modelItem => item.final)</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+
+                                    }
+                                }
                                 </tr>
 
-                                        }
+                            }
                             </tbody>
-                        </table>
-                    </div>
+                            </table>
+</div>
                 </div>
             </div>
             <hr />

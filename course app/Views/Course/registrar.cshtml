@@ -23,6 +23,29 @@
           id="bootstrap-css" />
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var id = @Html.Raw(Json.Encode(Model.registrar.id));
+            $.ajax({
+
+                url: '/Course/displayImage/' + id,
+                data: { section: id },
+                async: true,
+
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    $("#image").attr("src", "data:image/jpg;base64," + data);
+                }
+
+            });
+        });
+    </script>
+
 </head>
 @{
     if (Model.registrar.name != null)
@@ -45,11 +68,7 @@
                         <br />
                     </div>
                     <div class="col-sm-2">
-                        <a href="/users" class="pull-right">
-                            <img title="profile image"
-                                 class="img-circle img-responsive"
-                                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTn636aCqljZx-n2KoTFWjQvsgd0BQFM0pmVsMLeI5q5pRvp6Wo" />
-                        </a>
+                        <a href="/users" class="pull-right"><img id="image" title="profile image" class="img-circle img-responsive" style="width:300px;max-height:200px" src=""></a>
                     </div>
                 </div>
                 <br />

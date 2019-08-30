@@ -10,6 +10,7 @@
       
         $(document).ready(function () {
             toTable();
+            
         });
 
         $(function () {
@@ -26,6 +27,14 @@
                     $(this).val($(this).data("old"));
             });
         });</script>
+    <style>
+      
+
+            header > h3 {
+                display: inline-block;
+            }
+
+    </style>
 </head>
 <body>
     <div class="row">
@@ -36,13 +45,13 @@
 
             <hr>
             <h2 id="course">Course</h2>
-            <h3 id="section">Section </h3>
+            <header><span style="font-size:x-large">Section: </span><h3 id="section"></h3></header>
 
 
             <br>
         </div>
         <div class="col-sm-2">
-            <a href="/users" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="http://www.rlsandbox.com/img/profile.jpg"></a>
+            <a href="/users" class="pull-right"><img id="image" title="profile image" class="img-circle img-responsive" style="width:300px;max-height:200px" src=""></a>
 
         </div>
     </div>
@@ -62,6 +71,13 @@
             <button type="submit" class="btn btn-success" onclick="updateGrade()">Confirm Grades</button>
         </div>
     </div>
+    <p style="color:white">//</p>
+    <div class="row">
+        <div class="col-sm-3 pull-left">
+            <p id="applied" style="display:none;font-size:medium;color:brown">Grades have been applied.</p>
+        </div>
+    </div>
+    <p style="color:white">//</p>
     <table class="table" id="Table">
         <thead class="thead-dark">
             <tr>
@@ -78,7 +94,7 @@
             </tr>
         </thead>
     </table>
-   
+
     <br />
 </body>
     @*@model course_app.Models.Ornek

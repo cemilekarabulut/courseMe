@@ -26,13 +26,15 @@ CREATE TABLE `course_records` (
   `id` int(2) NOT NULL AUTO_INCREMENT,
   `sectionId` int(2) DEFAULT NULL,
   `studentId` int(2) DEFAULT NULL,
-  `grade` float DEFAULT NULL,
+  `midterm` double DEFAULT NULL,
+  `final` double DEFAULT NULL,
+  `isPassed` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_section` (`sectionId`),
   KEY `fk_student` (`studentId`),
   CONSTRAINT `fk_section` FOREIGN KEY (`sectionId`) REFERENCES `section` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `fk_student` FOREIGN KEY (`studentId`) REFERENCES `student` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +43,7 @@ CREATE TABLE `course_records` (
 
 LOCK TABLES `course_records` WRITE;
 /*!40000 ALTER TABLE `course_records` DISABLE KEYS */;
-INSERT INTO `course_records` VALUES (4,2,2,20),(8,4,1,100),(9,4,2,10);
+INSERT INTO `course_records` VALUES (26,16,16,85,90,1),(28,17,16,NULL,NULL,NULL),(29,18,17,87,NULL,NULL),(31,16,17,50,65,1),(33,16,18,45,85,1);
 /*!40000 ALTER TABLE `course_records` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-17  8:55:43
+-- Dump completed on 2019-08-30 15:46:24

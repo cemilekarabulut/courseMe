@@ -7,7 +7,7 @@ namespace course_app.Models
 {
     public class login
     {
-        public int id { get; set; }
+       
         [Required]
         public string email { get; set; }
         [Required]

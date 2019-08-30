@@ -20,7 +20,28 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-  
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var id = @Html.Raw(Json.Encode(Model.student.id));
+            $.ajax({
+
+                url: '/Course/displayImage/' + id,
+                data: { section: id },
+                async: true,
+
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    $("#image").attr("src", "data:image/jpg;base64," + data);
+                }
+
+            });
+        });
+    </script>
 
 </head>
 @{
@@ -44,7 +65,7 @@
                         <br>
                     </div>
                     <div class="col-sm-2">
-                        <a href="/users" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="http://www.rlsandbox.com/img/profile.jpg"></a>
+                        <a href="/users" class="pull-right"><img id="image" title="profile image" class="img-circle img-responsive" style="width:300px;max-height:200px" src=""></a>
 
                     </div>
                 </div>
@@ -54,7 +75,7 @@
                         <!--left col-->
                         <ul class="list-group">
                             <li class="list-group-item text-muted" contenteditable="false">Profile</li>
-                            <li class="list-group-item text-right"><span class="pull-left"><strong class="">ID  </strong></span> @Html.DisplayFor(model => model.student.id)</li>
+                            <li class="list-group-item text-right" id="id"><span class="pull-left"><strong class="">ID  </strong></span> @Html.DisplayFor(model => model.student.id)</li>
                             <li class="list-group-item text-right"><span class="pull-left"><strong class="">Name</strong></span> @Html.DisplayFor(model => model.student.name)</li>
                             <li class="list-group-item text-right"><span class="pull-left"><strong class="">Surname</strong></span> @Html.DisplayFor(model => model.student.surname)</li>
                             <li class="list-group-item text-right"><span class="pull-left"><strong class="">Age</strong></span> @Html.DisplayFor(model => model.student.age)</li>

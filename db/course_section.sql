@@ -32,7 +32,7 @@ CREATE TABLE `section` (
   KEY `id` (`courseId`),
   CONSTRAINT `fk_id` FOREIGN KEY (`instructorId`) REFERENCES `instructor` (`id`) ON DELETE RESTRICT,
   CONSTRAINT `id` FOREIGN KEY (`courseId`) REFERENCES `course` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `section` (
 
 LOCK TABLES `section` WRITE;
 /*!40000 ALTER TABLE `section` DISABLE KEYS */;
-INSERT INTO `section` VALUES (2,2,2,'2/2/2014'),(4,3,2,'15/5/2018');
+INSERT INTO `section` VALUES (16,1,15,'Çarşamba 13:40-15:30'),(17,2,16,'Cuma 15:40-17:30'),(18,3,17,'Salı 10:40-12:30');
 /*!40000 ALTER TABLE `section` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-17  8:55:44
+-- Dump completed on 2019-08-30 15:46:24

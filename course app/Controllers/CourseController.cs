@@ -235,24 +235,47 @@ namespace course_app.Controllers
 
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Signup(student user)
+        public ActionResult Signup(student user,HttpPostedFileBase image1)
         {
             //if (user.name == null || user.surname == null || user.email == null || user.password == null || user.gender == null || user.age==0) {
             //    return View("error");
             //}
+
+            user.image = new byte[1]; 
+            user.image[0] = 0x20;
+
             if (ModelState.IsValid == true)
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand($"insert into student(name,surname,email,password,age,gender) values('{user.name}', '{user.surname}', '{user.email}', '{user.password}', '{user.age}', '{user.gender}');", conn);
+                MySqlCommand cmd = new MySqlCommand($"insert into student (name,surname,email,password,age,gender) values('{user.name}', '{user.surname}', '{user.email}', '{user.password}', '{user.age}', '{user.gender}');", conn);
                 MySqlCommand cmd2 = new MySqlCommand($"insert into login(email,password,title) values( '{user.email}', '{user.password}', 'student');", conn);
+                MySqlCommand cmd3 = new MySqlCommand("SELECT id FROM student ORDER BY id DESC LIMIT 0, 1", conn);
                 MySqlDataReader MyReader;
                 MyReader = cmd.ExecuteReader();
                 conn.Close();
                 conn.Open();
                 MyReader = cmd2.ExecuteReader();
                 conn.Close();
+                conn.Open();
+                MyReader = cmd3.ExecuteReader();
+                while (MyReader.Read())
+                {
+                    user.id = Convert.ToInt32(MyReader["id"]);
+                }
+                conn.Close();
+                if (image1 != null)
+                {
+                    user.image = new byte[image1.ContentLength];
+                    image1.InputStream.Read(user.image, 0, image1.ContentLength);
+                }
+                conn.Open();
+                MySqlCommand addPhoto = new MySqlCommand($"update student set image=@img where id='{user.id}';", conn);
+                addPhoto.Prepare();
 
-
+                addPhoto.Parameters.Add("@img", MySqlDbType.Binary, user.image.Length);
+                addPhoto.Parameters["@img"].Value = user.image;
+                addPhoto.ExecuteNonQuery();
+                conn.Close();
 
                 return View("Index");
             }
@@ -484,14 +507,22 @@ namespace course_app.Controllers
                     p.Add(new student_list() { student_name = MyReader["name"].ToString(), student_id = Convert.ToInt32(MyReader["id"]), student_surname = MyReader["surname"].ToString(), final = Convert.ToDouble(MyReader["final"]), midterm = -2 });
                 else
                     p.Add(new student_list() { student_name = MyReader["name"].ToString(), student_id = Convert.ToInt32(MyReader["id"]), student_surname = MyReader["surname"].ToString(), midterm = Convert.ToDouble(MyReader["midterm"]), final = Convert.ToDouble(MyReader["final"]) });
-                section_id = Convert.ToInt32(MyReader["sectionid"]);
-                course_name = MyReader["coursename"].ToString();
+        
+            }
+            conn.Close();
+            conn.Open();
+            MySqlCommand command = new MySqlCommand($"select c.name from (select courseId from section where id={instructor.section_id}) s left outer join course c on c.id=s.courseId;", conn);
+            MyReader = command.ExecuteReader();
+            while (MyReader.Read())
+            {
+                
+                course_name = MyReader["name"].ToString();
             }
             conn.Close();
             Ornek ornek = new Ornek();
             ornek.instructor = instructor;
             ornek.students = p;
-            ornek.section_id = section_id;
+            ornek.section_id = instructor.section_id;
             ornek.course_name = course_name;
             temporary = ornek;
             return View(ornek);
@@ -501,9 +532,14 @@ namespace course_app.Controllers
         {
             List<student_list> list = new List<student_list>();
             list = temporary.students;
+            if (list.Count==0)
+            {
+                list.Add(new student_list() { section_id = temporary.section_id , course_name = temporary.course_name , section_date = temporary.instructor.name + " " + temporary.instructor.surname });
+            }
+            else { 
             list[0].section_id = temporary.section_id;
             list[0].course_name = temporary.course_name;
-            list[0].section_date = temporary.instructor.name + " " + temporary.instructor.surname;
+            list[0].section_date = temporary.instructor.name + " " + temporary.instructor.surname;}
             return Json(list, JsonRequestBehavior.AllowGet);
         }
         public ActionResult delete_course_instructor(instructor instructor)
@@ -600,22 +636,45 @@ namespace course_app.Controllers
         }
 
         [HttpPost]
-        public ActionResult signTeacher(instructor instructor)
+        public ActionResult signTeacher(instructor instructor, HttpPostedFileBase image1)
         {
             if (ModelState.IsValid == true)
             {
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand($"insert into instructor(name,surname,email,password,age,gender,field) values('{instructor.name}', '{instructor.surname}', '{instructor.email}', '{instructor.password}', '{instructor.age}', '{instructor.gender}','{instructor.field}');", conn);
                 MySqlCommand cmd2 = new MySqlCommand($"insert into login(email,password,title) values( '{instructor.email}', '{instructor.password}', 'instructor');", conn);
+                MySqlCommand cmd3 = new MySqlCommand("SELECT id FROM instructor ORDER BY id DESC LIMIT 0, 1", conn);
                 MySqlDataReader MyReader;
                 MyReader = cmd.ExecuteReader();
+
                 conn.Close();
                 conn.Open();
                 MyReader = cmd2.ExecuteReader();
                 conn.Close();
+                conn.Open();
+                MyReader = cmd3.ExecuteReader();
+                while (MyReader.Read())
+                {
+                    instructor.id = Convert.ToInt32(MyReader["id"]);
+                }
+                conn.Close();
                 registrar registrar = new registrar();
                 registrar = temp;
                 temp = null;
+                if (image1 != null)
+                {
+                    instructor.image = new byte[image1.ContentLength];
+                    image1.InputStream.Read(instructor.image, 0, image1.ContentLength);
+                }
+                conn.Open();
+                MySqlCommand addPhoto = new MySqlCommand($"update instructor set image=@img where id='{instructor.id}';", conn);
+                addPhoto.Prepare();
+
+                addPhoto.Parameters.Add("@img", MySqlDbType.Binary, instructor.image.Length);
+                addPhoto.Parameters["@img"].Value = instructor.image;
+                addPhoto.ExecuteNonQuery();
+                conn.Close();
+                
                 return RedirectToAction("registrar", registrar);
 
 
@@ -633,7 +692,7 @@ namespace course_app.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult signParent(parent parent)
+        public ActionResult signParent(parent parent, HttpPostedFileBase image1)
         {
 
             if (ModelState.IsValid == true)
@@ -645,6 +704,7 @@ namespace course_app.Controllers
                 MySqlCommand cmd = new MySqlCommand($"insert into parent(name,surname,email,password,age,gender) values('{parent.name}', '{parent.surname}', '{parent.email}', '{parent.password}', '{parent.age}', '{parent.gender}');", conn);
                 MySqlCommand cmd2 = new MySqlCommand($"insert into login(email,password,title) values( '{parent.email}', '{parent.password}', 'parent');", conn);
                 MySqlCommand command = new MySqlCommand($"select parent.id from parent where email='{parent.email}' and password= '{parent.password}';", conn);
+                MySqlCommand cmd4 = new MySqlCommand("SELECT id FROM parent ORDER BY id DESC LIMIT 0, 1", conn);
                 conn.Open();
                 MyReader = cmd.ExecuteReader();
                 conn.Close();
@@ -668,9 +728,30 @@ namespace course_app.Controllers
                     MyReader = cmd3.ExecuteReader();
                     conn.Close();
                 }
+                conn.Open();
+                MyReader = cmd4.ExecuteReader();
+                while (MyReader.Read())
+                {
+                    parent.id = Convert.ToInt32(MyReader["id"]);
+                }
+                conn.Close();
                 registrar registrar = new registrar();
                 registrar = temp;
                 temp = null;
+                if (image1 != null)
+                {
+                    parent.image = new byte[image1.ContentLength];
+                    image1.InputStream.Read(parent.image, 0, image1.ContentLength);
+                }
+                conn.Open();
+                MySqlCommand addPhoto = new MySqlCommand($"update parent set image=@img where id='{parent.id}';", conn);
+                addPhoto.Prepare();
+
+                addPhoto.Parameters.Add("@img", MySqlDbType.Binary, parent.image.Length);
+                addPhoto.Parameters["@img"].Value = parent.image;
+                addPhoto.ExecuteNonQuery();
+                conn.Close();
+
                 return RedirectToAction("registrar", registrar);
 
 
@@ -980,7 +1061,7 @@ namespace course_app.Controllers
             conn.Close();
             return View(a);
         }
-        public List<student> item = new List<student>();
+        
 
         public ActionResult retrieveImage()
         {
@@ -990,7 +1071,7 @@ namespace course_app.Controllers
             conn.Open();
             MySqlCommand show = new MySqlCommand();
             show.Connection = conn;
-            show.CommandText = $"SELECT image FROM student WHERE id=8";
+            show.CommandText = $"SELECT image FROM student WHERE id=14";
             MySqlDataReader MyReader;
             MyReader = show.ExecuteReader();
             while (MyReader.Read())
@@ -1000,11 +1081,135 @@ namespace course_app.Controllers
 
             conn.Close();
             a.image = data;
-            item.Add(a);
-            return View(item);
+            
+            return View(a);
         }
+        public ActionResult displayImage(int section)
+        {
+            if (Session["ActiveUser"].ToString() == "instructor") { 
+            int x = 0;
+            byte[] data = null;
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand($"select instructorId from section where id={section}", conn);
+            MySqlDataReader my;
+            my = cmd.ExecuteReader();
+            while (my.Read())
+            {
+                x = Convert.ToInt32(my["instructorId"]);
+            }
+           
+            conn.Close();
+           
+            
+            conn.Open();
+            MySqlCommand show = new MySqlCommand();
+            show.Connection = conn;
+            show.CommandText = $"SELECT image FROM instructor WHERE id={x}";
+            MySqlDataReader MyReader;
+            MyReader = show.ExecuteReader();
+            while (MyReader.Read())
+            {
+                data = (byte[])MyReader["image"];
+            }
 
-    }
+            conn.Close();
+            string str = Convert.ToBase64String(data);
+            var str2= string.Format("data:image/jpg;base64,{0}", str);
+            return Json(str,JsonRequestBehavior.AllowGet);}
+            else if(Session["ActiveUser"].ToString() == "student")
+            {
+                
+                byte[] data = null;
+                
+
+
+                conn.Open();
+                MySqlCommand show = new MySqlCommand();
+                show.Connection = conn;
+                show.CommandText = $"SELECT image FROM student WHERE id={section}";
+                MySqlDataReader MyReader;
+                MyReader = show.ExecuteReader();
+                while (MyReader.Read())
+                {
+                    data = (byte[])MyReader["image"];
+                }
+
+                conn.Close();
+                string str = Convert.ToBase64String(data);
+                var str2 = string.Format("data:image/jpg;base64,{0}", str);
+                return Json(str, JsonRequestBehavior.AllowGet);
+            }
+            else if (Session["ActiveUser"].ToString() == "registrar")
+            {
+
+                byte[] data = null;
+
+
+
+                conn.Open();
+                MySqlCommand show = new MySqlCommand();
+                show.Connection = conn;
+                show.CommandText = $"SELECT image FROM registrar WHERE id={section}";
+                MySqlDataReader MyReader;
+                MyReader = show.ExecuteReader();
+                while (MyReader.Read())
+                {
+                    data = (byte[])MyReader["image"];
+                }
+
+                conn.Close();
+                string str = Convert.ToBase64String(data);
+                var str2 = string.Format("data:image/jpg;base64,{0}", str);
+                return Json(str, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+
+                byte[] data = null;
+
+
+
+                conn.Open();
+                MySqlCommand show = new MySqlCommand();
+                show.Connection = conn;
+                show.CommandText = $"SELECT image FROM parent WHERE id={section}";
+                MySqlDataReader MyReader;
+                MyReader = show.ExecuteReader();
+                while (MyReader.Read())
+                {
+                    data = (byte[])MyReader["image"];
+                }
+
+                conn.Close();
+                string str = Convert.ToBase64String(data);
+                var str2 = string.Format("data:image/jpg;base64,{0}", str);
+                return Json(str, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult displayImage2(int section)
+        {
+
+
+            byte[] data = null;
+
+            conn.Open();
+                MySqlCommand show = new MySqlCommand();
+                show.Connection = conn;
+                show.CommandText = $"SELECT image FROM instructor WHERE id={section}";
+                MySqlDataReader MyReader;
+                MyReader = show.ExecuteReader();
+                while (MyReader.Read())
+                {
+                    data = (byte[])MyReader["image"];
+                }
+
+                conn.Close();
+                string str = Convert.ToBase64String(data);
+                var str2 = string.Format("data:image/jpg;base64,{0}", str);
+                return Json(str, JsonRequestBehavior.AllowGet);
+            }
+
+        }
 
 
 }

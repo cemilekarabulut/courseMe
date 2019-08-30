@@ -22,8 +22,28 @@
     <title>Document</title>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 
-   
 
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var id = @Html.Raw(Json.Encode(Model.parent.id));
+            $.ajax({
+
+                url: '/Course/displayImage/' + id,
+                data: { section: id },
+                async: true,
+
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    $("#image").attr("src", "data:image/jpg;base64," + data);
+                }
+
+            });
+        });
+    </script>
 
 
 </head>
@@ -37,7 +57,7 @@
             <div class="container target">
                 <div class="row">
                     <div class="col-sm-10">
-                        <h1 class="">Parent Information System</h1>
+                        <h1 class="">Parent Informing System</h1>
                         @Html.ActionLink("New Child", "addChild", "Course", Model.parent, new { @class = "btn btn-info" })
                         @Html.ActionLink("Logout", "Index", "Course", null, new { @class = "btn btn-primary btn-danger" })
 
@@ -45,7 +65,7 @@
 
                     </div>
                     <div class="col-sm-2">
-                        <a href="/users" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="http://www.rlsandbox.com/img/profile.jpg"></a>
+                        <a href="/users" class="pull-right"><img id="image" title="profile image" class="img-circle img-responsive" style="width:300px;max-height:200px" src=""></a>
 
                     </div>
                 </div>
@@ -80,7 +100,7 @@
                                                 <th scope="col">Section</th>
                                                 <th scope="col">Date</th>
                                                 <th scope="col">Midterm</th>
-                                                <th scope="col">Letter Grade</th>
+                                                <th scope="col">Final</th>
 
                                             </tr>
                                         </thead>

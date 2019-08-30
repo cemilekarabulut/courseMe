@@ -18,6 +18,7 @@ namespace course_app.Models
         public string email { get; set; }
         [Required]
         public string password { get; set; }
+      
         public byte[] image{ get; set; }
         [Required]
         public int age { get; set; }

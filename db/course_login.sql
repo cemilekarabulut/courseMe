@@ -28,7 +28,7 @@ CREATE TABLE `login` (
   `password` varchar(45) DEFAULT NULL,
   `title` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,7 @@ CREATE TABLE `login` (
 
 LOCK TABLES `login` WRITE;
 /*!40000 ALTER TABLE `login` DISABLE KEYS */;
-INSERT INTO `login` VALUES (1,'a@gmail.com','1234','student'),(2,'b@gmail.com','8989','instructor'),(3,'c@gmail.com','0000','parent'),(4,'d@gmail.com','1111','registrar'),(5,'e@gmail.com','0000','student'),(6,'f@gmail.com','8888','student'),(7,'cemile@gmail.com','0000','student'),(8,'','','student');
+INSERT INTO `login` VALUES (26,'samjefferson@gmail.com','0000','instructor'),(30,'peyamikaygisiz@gmail.com','1111','parent'),(31,'pelinkaygisiz@gmail.com','000','student'),(32,'selimkaygisiz@gmail.com','0000','student'),(35,'ezgiince@gmail.com','0000','registrar');
 /*!40000 ALTER TABLE `login` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-17  8:55:45
+-- Dump completed on 2019-08-30 15:46:26
